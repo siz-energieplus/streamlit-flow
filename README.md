@@ -85,6 +85,7 @@ streamlit run example.py
 * Add argument to StreamlitFlow for setting default edge options
 * Implement new node type for nodes with multiple source/target anchors
     * This is an API-breaking change in the sense that it adds arguments to the constructor of StreamlitFlowNode. Code that relies on positional arguments might break due to these additional arguments.
+* Make the frontend runnable as docker container so it is available to other local streamlit apps
 
 ## Change log
 
