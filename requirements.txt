@@ -1,0 +1,2 @@
+streamlit>=1.42.0
+debugpy==1.5.1
