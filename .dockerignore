@@ -1,0 +1,10 @@
+# Human readable files
+MANIFEST.in
+README.md
+LICENSE
+
+
+#Other
+assets
+streamlit_flow/frontend/node_modules
+.gitignore

@@ -86,6 +86,7 @@ streamlit run example.py
 * Implement new node type for nodes with multiple source/target anchors
     * This is an API-breaking change in the sense that it adds arguments to the constructor of StreamlitFlowNode. Code that relies on positional arguments might break due to these additional arguments.
 * Make the frontend runnable as docker container so it is available to other local streamlit apps
+    * This includes the option for hot-reloading frontend code, which is useful for testing
 
 ## Change log
 
