@@ -106,7 +106,7 @@ const CreateNodeModal = ({show, handleClose, nodes, edges, theme, setPaneContext
                     </FloatingLabel>
                 </Col>
             </Row>
-            <Row className='g-2 mt-1 mt-md-0'>
+            {/* <Row className='g-2 mt-1 mt-md-0'>
                 <Col md>
                     <FloatingLabel controlId="floatingInput" label="Node Width">
                         <Form.Control type="number" value={newNode.nodeWidth} placeholder="nodeWidth" autoFocus onChange={onNodeWidthChange}/>
@@ -154,7 +154,7 @@ const CreateNodeModal = ({show, handleClose, nodes, edges, theme, setPaneContext
                 <Col md>
                     <Form.Check type="switch" id="node-deletable-switch" label="Deletable" defaultChecked onChange={onNodeDeletableChange}/>
                 </Col>
-            </Row>
+            </Row> */}
         </Modal.Body>
         <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>

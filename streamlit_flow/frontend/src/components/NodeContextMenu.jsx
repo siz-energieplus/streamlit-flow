@@ -71,7 +71,7 @@ const EditNodeModal = ({show, node, handleClose, theme, setNodeContextMenu, setM
                 </FloatingLabel>
             </Col>
         </Row>
-        <Row className='g-2 mt-1 mt-md-0'>
+        {/* <Row className='g-2 mt-1 mt-md-0'>
             <Col md>
                 <FloatingLabel controlId="floatingInput" label="Node Width">
                     <Form.Control type="number" placeholder="nodeWidth" value={editedNode.width} autoFocus onChange={onNodeWidthChange}/>
@@ -86,9 +86,9 @@ const EditNodeModal = ({show, node, handleClose, theme, setNodeContextMenu, setM
                     </Form.Select>
                 </FloatingLabel>
             </Col>
-        </Row>
-            <Row className="g-2 mt-1 mt-md-0">
-                <Col md>
+        </Row> */}
+            {/* <Row className="g-2 mt-1 mt-md-0"> */}
+                {/* <Col md>
                     <FloatingLabel controlId="floatingSelect" label="Source Position" onChange={onNodeSourcePositionChange}>
                         <Form.Select defaultValue={editedNode.sourcePosition}>
                             <option value="right">Right</option>
@@ -97,8 +97,8 @@ const EditNodeModal = ({show, node, handleClose, theme, setNodeContextMenu, setM
                             <option value="left">Left</option>
                         </Form.Select>
                     </FloatingLabel>
-                </Col>
-                <Col md>
+                </Col> */}
+                {/* <Col md>
                     <FloatingLabel controlId="floatingSelect" label="Target Position" onChange={onNodeTargetPositionChange}>
                         <Form.Select defaultValue={editedNode.targetPosition}>
                             <option value="left">Left</option>
@@ -107,9 +107,9 @@ const EditNodeModal = ({show, node, handleClose, theme, setNodeContextMenu, setM
                             <option value="bottom">Bottom</option>
                         </Form.Select>
                     </FloatingLabel>
-                </Col>
-            </Row>
-            <Row className="g-2 mt-2">
+                </Col> */}
+            {/* </Row> */}
+            {/* <Row className="g-2 mt-2">
                 <Col md>
                     <Form.Check type="switch" id="node-draggable-switch" label="Draggable" defaultChecked={editedNode.draggable} onChange={onNodeDraggableChange}/>
                 </Col>
@@ -119,7 +119,7 @@ const EditNodeModal = ({show, node, handleClose, theme, setNodeContextMenu, setM
                 <Col md>
                     <Form.Check type="switch" id="node-deletable-switch" label="Deletable" defaultChecked={editedNode.deletable} onChange={onNodeDeletableChange}/>
                 </Col>
-            </Row>
+            </Row> */}
         </Modal.Body>
         <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
