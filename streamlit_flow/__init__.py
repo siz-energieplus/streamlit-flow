@@ -9,9 +9,11 @@ from .state import StreamlitFlowState
 _RELEASE = False
 
 if not _RELEASE:
+    port = int(os.getenv("STREAMLIT_FLOW_PORT", "3001"))
+    print(f"Streamlit-flow component listening on port {port}")
     _st_flow_func = components.declare_component(
         "streamlit_flow",
-        url="http://localhost:3001/",
+        url=f"http://localhost:{port}/",
     )
 
 else:
