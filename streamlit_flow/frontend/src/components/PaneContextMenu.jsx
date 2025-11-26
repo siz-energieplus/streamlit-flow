@@ -177,11 +177,11 @@ const PaneConextMenu = ({paneContextMenu, setPaneContextMenu, nodes, edges, layo
         setShowModal(false);
         setModalClosing(true);
     };
-    const handleShow = () => setShowModal(true);
+    // const handleShow = () => setShowModal(true);
 
-    const handleAddNode = (e) => {
-        handleShow();
-    };
+    // const handleAddNode = (e) => {
+    //     handleShow();
+    // };
 
     const handleLayoutReset = (e) => {
         setPaneContextMenu(null);
@@ -199,7 +199,7 @@ const PaneConextMenu = ({paneContextMenu, setPaneContextMenu, nodes, edges, layo
                         borderRadius: '8px',
                         zIndex: 10}}>
             {(!showModal && !modalClosing) && <ButtonGroup vertical>
-                <Button variant="outline-primary" onClick={handleAddNode}><i className='bi bi-pencil'></i> Create New Node</Button>
+                {/* <Button variant="outline-primary" onClick={handleAddNode}><i className='bi bi-pencil'></i> Create New Node</Button> */}
                 <Button variant="outline-success" onClick={handleLayoutReset}><i className='bi bi-arrow-clockwise'></i> Reset Layout</Button>
             </ButtonGroup>}
         </div>
