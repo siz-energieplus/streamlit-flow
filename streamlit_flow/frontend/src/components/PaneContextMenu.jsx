@@ -26,33 +26,33 @@ const CreateNodeModal = ({show, handleClose, nodes, edges, theme, setPaneContext
         setNewNode((newNode) => ({...newNode, nodeContent: e.target.value}));
     }
 
-    const onNodeWidthChange = (e) => {
-        setNewNode((newNode) => ({...newNode, nodeWidth: e.target.value}));
-    }
+    // const onNodeWidthChange = (e) => {
+    //     setNewNode((newNode) => ({...newNode, nodeWidth: e.target.value}));
+    // }
 
-    const onNodeTypeChange = (e) => {
-        setNewNode((newNode) => ({...newNode, nodeType: e.target.value}));
-    }
+    // const onNodeTypeChange = (e) => {
+    //     setNewNode((newNode) => ({...newNode, nodeType: e.target.value}));
+    // }
 
-    const onNodeSourcePositionChange = (e) => {
-        setNewNode((newNode) => ({...newNode, sourcePosition: e.target.value}));
-    }
+    // const onNodeSourcePositionChange = (e) => {
+    //     setNewNode((newNode) => ({...newNode, sourcePosition: e.target.value}));
+    // }
 
-    const onNodeTargetPositionChange = (e) => {
-        setNewNode((newNode) => ({...newNode, targetPosition: e.target.value}));
-    }
+    // const onNodeTargetPositionChange = (e) => {
+    //     setNewNode((newNode) => ({...newNode, targetPosition: e.target.value}));
+    // }
 
-    const onNodeDraggableChange = (e) => { 
-        setNewNode((newNode) => ({...newNode, draggable: e.target.checked}));
-    }
+    // const onNodeDraggableChange = (e) => { 
+    //     setNewNode((newNode) => ({...newNode, draggable: e.target.checked}));
+    // }
 
-    const onNodeConnectableChange = (e) => {
-        setNewNode((newNode) => ({...newNode, connectable: e.target.checked}));
-    }
+    // const onNodeConnectableChange = (e) => {
+    //     setNewNode((newNode) => ({...newNode, connectable: e.target.checked}));
+    // }
 
-    const onNodeDeletableChange = (e) => {
-        setNewNode((newNode) => ({...newNode, deletable: e.target.checked}));
-    }
+    // const onNodeDeletableChange = (e) => {
+    //     setNewNode((newNode) => ({...newNode, deletable: e.target.checked}));
+    // }
 
     const onExited = (e) => {
         setModalClosing(true);

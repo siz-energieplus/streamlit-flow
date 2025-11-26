@@ -10,7 +10,7 @@ import Col from 'react-bootstrap/Col';
 const EditNodeModal = ({show, node, handleClose, theme, setNodeContextMenu, setModalClosing, setNodes, nodes, edges, handleDataReturnToStreamlit}) => {
 
     const [editedNode, setEditedNode] = useState(node);
-    const allowTypeChange = edges.filter(edge => edge.source === editedNode.id || edge.target === editedNode.id).length === 0;
+    // const allowTypeChange = edges.filter(edge => edge.source === editedNode.id || edge.target === editedNode.id).length === 0;
     
     const onExited = (e) => {
         setModalClosing(true);
@@ -21,34 +21,34 @@ const EditNodeModal = ({show, node, handleClose, theme, setNodeContextMenu, setM
         setEditedNode((editedNode) => ({...editedNode, data: {...editedNode.data, content: e.target.value}}));
     };
 
-    const onNodeWidthChange = (e) => {
-        const currStyle = editedNode.data.style;
-        setEditedNode((editedNode) => ({...editedNode, width: e.target.value, style: {...currStyle, width: e.target.value + 'px'}}));
-    };
+    // const onNodeWidthChange = (e) => {
+    //     const currStyle = editedNode.data.style;
+    //     setEditedNode((editedNode) => ({...editedNode, width: e.target.value, style: {...currStyle, width: e.target.value + 'px'}}));
+    // };
 
-    const onNodeTypeChange = (e) => {
-        setEditedNode((editedNode) => ({...editedNode, type: e.target.value}));
-    };
+    // const onNodeTypeChange = (e) => {
+    //     setEditedNode((editedNode) => ({...editedNode, type: e.target.value}));
+    // };
 
-    const onNodeSourcePositionChange = (e) => {
-        setEditedNode((editedNode) => ({...editedNode, sourcePosition: e.target.value}));
-    };
+    // const onNodeSourcePositionChange = (e) => {
+    //     setEditedNode((editedNode) => ({...editedNode, sourcePosition: e.target.value}));
+    // };
 
-    const onNodeTargetPositionChange = (e) => {
-        setEditedNode((editedNode) => ({...editedNode, targetPosition: e.target.value}));
-    };
+    // const onNodeTargetPositionChange = (e) => {
+    //     setEditedNode((editedNode) => ({...editedNode, targetPosition: e.target.value}));
+    // };
 
-    const onNodeDraggableChange = (e) => {
-        setEditedNode((editedNode) => ({...editedNode, draggable: e.target.checked}));
-    };
+    // const onNodeDraggableChange = (e) => {
+    //     setEditedNode((editedNode) => ({...editedNode, draggable: e.target.checked}));
+    // };
 
-    const onNodeConnectableChange = (e) => {
-        setEditedNode((editedNode) => ({...editedNode, connectable: e.target.checked}));
-    };
+    // const onNodeConnectableChange = (e) => {
+    //     setEditedNode((editedNode) => ({...editedNode, connectable: e.target.checked}));
+    // };
 
-    const onNodeDeletableChange = (e) => {
-        setEditedNode((editedNode) => ({...editedNode, deletable: e.target.checked}));
-    };
+    // const onNodeDeletableChange = (e) => {
+    //     setEditedNode((editedNode) => ({...editedNode, deletable: e.target.checked}));
+    // };
 
 
     const handleSaveChanges = (e) => {
