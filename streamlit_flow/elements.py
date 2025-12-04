@@ -16,7 +16,7 @@ class StreamlitFlowNode:
     - **source_position** : str : Position of the source anchors. One of ['top', 'bottom', 'left', 'right']
     - **source_handles** : int : Number of source anchors. Only required for node types 'input' and 'default'
     - **target_position** : str : Position of the target anchors. One of ['top', 'bottom', 'left', 'right']
-    - **source_handles** : int : Number of target anchors. Only required for node types 'output' and 'default'
+    - **target_handles** : int : Number of target anchors. Only required for node types 'output' and 'default'
     - **hidden** : bool : Whether the node is hidden
     - **selected** : bool : Whether the node is selected
     - **dragging** : bool : Whether the node is being dragged (?)
@@ -175,6 +175,8 @@ class StreamlitFlowEdge:
     - **label_show_bg** : bool : Whether to show background for the label
     - **label_bg_style** : Dict[str, any] : CSS style of the label background
     - **style** : Dict[str, any] : CSS style of the edge
+    - **sourceHandle** : str : the handle of the source node the edge is attached to
+    - **targetHandle** : str : the handle of the target node the edge is attached to
     """
 
     def __init__(self,
@@ -195,6 +197,8 @@ class StreamlitFlowEdge:
                     label_show_bg:bool=False,
                     label_bg_style:Dict[str, any]={},
                     style:Dict[str, any]={},
+                    sourceHandle:str="unknown",
+                    targetHandle:str="unknown",
                     **kwargs) -> None:
 
         self.id = id
@@ -215,6 +219,8 @@ class StreamlitFlowEdge:
         self.label_bg_style = label_bg_style
         self.style = style
         self.kwargs = kwargs
+        self.sourceHandle = sourceHandle
+        self.targetHandle = targetHandle
 
         self.__validate__()
 
@@ -238,7 +244,9 @@ class StreamlitFlowEdge:
                     label_style=edge_dict.get('labelStyle', {}),
                     label_show_bg=edge_dict.get('labelShowBg', False),
                     label_bg_style=edge_dict.get('labelBgStyle', {}),
-                    style=edge_dict.get('style', {}))
+                    style=edge_dict.get('style', {}),
+                    sourceHandle=edge_dict.get('sourceHandle',"unknown"),
+                    targetHandle=edge_dict.get('targetHandle',"unknown"))
 
 
     def __validate__(self) -> None:
@@ -263,7 +271,9 @@ class StreamlitFlowEdge:
             "labelStyle": self.label_style,
             "labelShowBg": self.label_show_bg,
             "labelBgStyle": self.label_bg_style,
-            "style": self.style
+            "style": self.style,
+            "sourceHandle": self.sourceHandle,
+            "targetHandle": self.targetHandle
         }
 
         edge_dict.update(self.kwargs)
