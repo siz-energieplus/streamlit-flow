@@ -1,4 +1,5 @@
 from typing import Dict, Tuple, Union, Type, TypeVar, Literal
+from nodeInput import NodeInput
 
 T_StreamlitFlowNode = TypeVar('T_StreamlitFlowNode', bound='StreamlitFlowNode')
 T_StreamlitFlowEdge = TypeVar('T_StreamlitFlowEdge', bound='StreamlitFlowEdge')
@@ -87,12 +88,16 @@ class StreamlitFlowNode:
 
     @classmethod
     def from_dict(cls: Type[T_StreamlitFlowNode], node_dict:Dict[str, any]) -> T_StreamlitFlowNode:
+        # serialize data extra, because it contains list of NodeInputs
+        data_obj = node_dict.get('data', {})
+        node_input_objects = data_obj.get('resie_data', [])
+        data_obj['resie_data'] = NodeInput.list_from_dict(node_input_objects)
 
         # other_attributes_dict = {key: value for key, value in node_dict.items() if key not in ['id', 'position', 'data', 'type', 'sourcePosition', 'targetPosition', 'hidden', 'selected', 'dragging', 'draggable', 'selectable', 'connectable', 'resizing', 'deletable', 'width', 'height', 'zIndex', 'focusable', 'style']}
 
         return cls( id=node_dict.get('id', ''),
                     pos=(node_dict['position'].get('x', 0), node_dict['position'].get('y', 0)),
-                    data=node_dict.get('data', {}),
+                    data=data_obj,
                     node_type=node_dict.get('type', 'default'),
                     source_position=node_dict.get('sourcePosition', 'bottom'),
                     source_handles=node_dict.get('sourceHandles', 0),
@@ -120,6 +125,9 @@ class StreamlitFlowNode:
 
 
     def asdict(self) -> Dict[str, any]:
+        node_inputs = self.data.get('resie_data', [])
+        self.data['resie_data'] = NodeInput.list_asdict(node_inputs)
+        
         node_dict = {
             "id": self.id,
             "position": self.position,
