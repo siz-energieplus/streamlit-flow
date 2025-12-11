@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import CustomInputField from './CustomNodeMenu/CustomInputFields';
+import CustomNodeMenuInputs from './CustomNodeMenu/CustomNodeMenuInputs';
 
 const EditNodeModal = ({
   show,
@@ -32,10 +32,11 @@ const EditNodeModal = ({
   };
 
   const onNodeDataChange = (key, newValue) => {
-    setEditedNode((editedNode) => ({
-      ...editedNode,
-      data: { ...editedNode.data, resie_data: { ...editedNode.data.resie_data, [key]: newValue } },
-    }));
+    var resie_data = editedNode.data.resie_data;
+    var node_input = resie_data.find((obj) => obj.display_name === key);
+    node_input.value = newValue;
+    editedNode.data.resie_data = resie_data;
+    setEditedNode(editedNode);
   };
 
   const handleSaveChanges = (e) => {
@@ -66,14 +67,7 @@ const EditNodeModal = ({
             </FloatingLabel>
           </Col>
         </Row>
-        {/* <Row className='g-2'>
-            <Col md>
-                <CustomInputField inputName={"constant_temperature"} startValue={editedNode.data.resie_data.constant_temperature} onEdit={onNodeDataChange} />
-            </Col>
-            <Col md>
-                <CustomInputField inputName={"temperature_profile_file_path"} startValue={editedNode.data.resie_data["temperature_profile_file_path"]} onEdit={onNodeDataChange} />
-            </Col>
-        </Row> */}
+        <CustomNodeMenuInputs nodeInputObjects={editedNode.data.resie_data} onEdit={onNodeDataChange} />
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
