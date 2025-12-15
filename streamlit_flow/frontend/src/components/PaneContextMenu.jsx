@@ -91,20 +91,30 @@ const CreateNodeModal = ({show, handleClose, nodes, edges, theme, setPaneContext
     );
 }
 
-const PaneConextMenu = ({paneContextMenu, setPaneContextMenu, nodes, edges, layoutOptions, setNodes, handleDataReturnToStreamlit, setLayoutCalculated, theme}) => {
-    
-    const [showModal, setShowModal] = useState(false);
-    const [modalClosing, setModalClosing] = useState(false);
+const PaneConextMenu = ({
+  paneContextMenu,
+  setPaneContextMenu,
+  nodes,
+  edges,
+  setNodes,
+  handleDataReturnToStreamlit,
+  setLayoutCalculated,
+  setOverrideLayout,
+  theme,
+}) => {
+  const [showModal, setShowModal] = useState(false);
+  const [modalClosing, setModalClosing] = useState(false);
 
     const handleClose = () => {
         setShowModal(false);
         setModalClosing(true);
     };
 
-    const handleLayoutReset = (e) => {
-        setPaneContextMenu(null);
-        setLayoutCalculated(false);
-    };
+  const handleLayoutReset = (e) => {
+    setOverrideLayout(true);
+    setPaneContextMenu(null);
+    setLayoutCalculated(false);
+  };
 
     return (
         <>

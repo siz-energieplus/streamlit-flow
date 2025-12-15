@@ -36,11 +36,12 @@ const StreamlitFlowComponent = (props) => {
         default: MarkdownDefaultNode
     }), []);
 
-    const [viewFitAfterLayout, setViewFitAfterLayout] = useState(null);
-    const [nodes, setNodes, onNodesChange] = useNodesState(props.args.nodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(props.args.edges);
-    const [lastUpdateTimestamp, setLastUpdateTimestamp] = useState(props.args.timestamp);
-    const [layoutNeedsUpdate, setLayoutNeedsUpdate] = useState(false);
+  const [viewFitAfterLayout, setViewFitAfterLayout] = useState(null);
+  const [nodes, setNodes, onNodesChange] = useNodesState(props.args.nodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(props.args.edges);
+  const [lastUpdateTimestamp, setLastUpdateTimestamp] = useState(props.args.timestamp);
+  const [layoutNeedsUpdate, setLayoutNeedsUpdate] = useState(false);
+  const [overrideLayout, setOverrideLayout] = useState(false);
 
     const [layoutCalculated, setLayoutCalculated] = useState(false);
 
@@ -54,18 +55,20 @@ const StreamlitFlowComponent = (props) => {
     const reactFlowInstance = useReactFlow();
     const {fitView, getNodes, getEdges} = useReactFlow();
 
-    // Helper Functions
-    const handleLayout = () => {
-        createElkGraphLayout(getNodes(), getEdges(), props.args.layoutOptions)
-            .then(({nodes, edges}) => {
-                setNodes(nodes);
-                setEdges(edges);
-                setViewFitAfterLayout(false);
-                handleDataReturnToStreamlit(nodes, edges, null);
-                setLayoutCalculated(true);
-            })
-            .catch(err => console.log(err));
-    }
+  // Helper Functions
+  const handleLayout = () => {
+    const layoutOptions = overrideLayout ? props.args.resetLayoutOptions : props.args.layoutOptions;
+    createElkGraphLayout(getNodes(), getEdges(), layoutOptions)
+      .then(({ nodes, edges }) => {
+        setNodes(nodes);
+        setEdges(edges);
+        setViewFitAfterLayout(false);
+        handleDataReturnToStreamlit(nodes, edges, null);
+        setOverrideLayout(false);
+        setLayoutCalculated(true);
+      })
+      .catch((err) => console.log(err));
+  };
 
     const handleDataReturnToStreamlit = (_nodes, _edges, selectedId) => {
 
@@ -213,70 +216,77 @@ const StreamlitFlowComponent = (props) => {
         handleDataReturnToStreamlit(updatedNodes, edges, null);
     }
 
-    return (
-        <div style={{height: props.args.height}}>
-            <ReactFlow
-                nodeTypes={nodeTypes}
-                ref={ref}
-                nodes={nodes}
-                onNodesChange={onNodesChange}
-                onNodeDragStop={handleNodeDragStop}
-                edges={edges}
-                onEdgesChange={onEdgesChange}
-                onConnect={props.args.allowNewEdges ? handleConnect : null}
-                fitView={props.args.fitView}
-                style={props.args.style}
-                onNodeClick={handleNodeClick}
-                onEdgeClick={handleEdgeClick}
-                onNodeDragStart={clearMenus}
-                onPaneClick={handlePaneClick}
-                onPaneContextMenu={props.args.enablePaneMenu ? handlePaneContextMenu : (event) => {}}
-                onNodeContextMenu={props.args.enableNodeMenu ? handleNodeContextMenu : (event, node) => {}}
-                onEdgeContextMenu={props.args.enableEdgeMenu ? handleEdgeContextMenu : (event, edge) => {}}
-                panOnDrag={props.args.panOnDrag}
-                zoomOnDoubleClick={props.args.allowZoom}
-                zoomOnScroll={props.args.allowZoom}
-                zoomOnPinch={props.args.allowZoom}
-                minZoom={props.args.minZoom}
-                defaultEdgeOptions={props.args.defaultEdgeOptions}
-                proOptions={{hideAttribution: props.args.hideWatermark}}>
-                    <Background/>
-                    {paneContextMenu && <PaneConextMenu 
-                                            paneContextMenu={paneContextMenu} 
-                                            setPaneContextMenu={setPaneContextMenu}
-                                            nodes={nodes} 
-                                            edges={edges} 
-                                            setNodes={setNodes} 
-                                            handleDataReturnToStreamlit={handleDataReturnToStreamlit}
-                                            setLayoutCalculated={setLayoutCalculated}
-                                            theme={props.theme}
-                                            />
-                    }
-                    {nodeContextMenu && <NodeContextMenu 
-                                            nodeContextMenu={nodeContextMenu} 
-                                            setNodeContextMenu={setNodeContextMenu}
-                                            nodes={nodes}
-                                            edges={edges}
-                                            setNodes={setNodes}
-                                            setEdges={setEdges}
-                                            handleDataReturnToStreamlit={handleDataReturnToStreamlit}
-                                            theme={props.theme} 
-                                            />
-                    }
-                    {edgeContextMenu && <EdgeContextMenu 
-                                            edgeContextMenu={edgeContextMenu} 
-                                            setEdgeContextMenu={setEdgeContextMenu} 
-                                            nodes={nodes}
-                                            edges={edges}
-                                            setEdges={setEdges}
-                                            handleDataReturnToStreamlit={handleDataReturnToStreamlit} 
-                                            theme={props.theme}/>}
-                    {props.args["showControls"] && <Controls/>}
-                    {props.args["showMiniMap"] && <MiniMap pannable zoomable/>}
-                </ReactFlow>
-        </div>
-    );
-}
+  return (
+    <div style={{ height: props.args.height }}>
+      <ReactFlow
+        nodeTypes={nodeTypes}
+        ref={ref}
+        nodes={nodes}
+        onNodesChange={onNodesChange}
+        onNodeDragStop={handleNodeDragStop}
+        edges={edges}
+        onEdgesChange={onEdgesChange}
+        onConnect={props.args.allowNewEdges ? handleConnect : null}
+        fitView={props.args.fitView}
+        style={props.args.style}
+        onNodeClick={handleNodeClick}
+        onEdgeClick={handleEdgeClick}
+        onNodeDragStart={clearMenus}
+        onPaneClick={handlePaneClick}
+        onPaneContextMenu={props.args.enablePaneMenu ? handlePaneContextMenu : (event) => {}}
+        onNodeContextMenu={props.args.enableNodeMenu ? handleNodeContextMenu : (event, node) => {}}
+        onEdgeContextMenu={props.args.enableEdgeMenu ? handleEdgeContextMenu : (event, edge) => {}}
+        panOnDrag={props.args.panOnDrag}
+        zoomOnDoubleClick={props.args.allowZoom}
+        zoomOnScroll={props.args.allowZoom}
+        zoomOnPinch={props.args.allowZoom}
+        minZoom={props.args.minZoom}
+        defaultEdgeOptions={props.args.defaultEdgeOptions}
+        proOptions={{ hideAttribution: props.args.hideWatermark }}
+      >
+        <Background />
+        {paneContextMenu && (
+          <PaneConextMenu
+            paneContextMenu={paneContextMenu}
+            setPaneContextMenu={setPaneContextMenu}
+            setOverrideLayout={setOverrideLayout}
+            nodes={nodes}
+            edges={edges}
+            setNodes={setNodes}
+            handleDataReturnToStreamlit={handleDataReturnToStreamlit}
+            setLayoutCalculated={setLayoutCalculated}
+            theme={props.theme}
+          />
+        )}
+        {nodeContextMenu && (
+          <NodeContextMenu
+            nodeContextMenu={nodeContextMenu}
+            setNodeContextMenu={setNodeContextMenu}
+            nodes={nodes}
+            edges={edges}
+            setNodes={setNodes}
+            setEdges={setEdges}
+            handleDataReturnToStreamlit={handleDataReturnToStreamlit}
+            theme={props.theme}
+          />
+        )}
+        {edgeContextMenu && (
+          <EdgeContextMenu
+            edgeContextMenu={edgeContextMenu}
+            setEdgeContextMenu={setEdgeContextMenu}
+            nodes={nodes}
+            edges={edges}
+            setEdges={setEdges}
+            handleDataReturnToStreamlit={handleDataReturnToStreamlit}
+            theme={props.theme}
+          />
+        )}
+        {props.args['showControls'] && <Controls />}
+        {props.args['showMiniMap'] && <MiniMap pannable zoomable />}
+      </ReactFlow>
+    </div>
+  );
+};
 
 const ContextualStreamlitFlowComponent = (props) => {
     return (
