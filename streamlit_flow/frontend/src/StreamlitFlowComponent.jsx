@@ -41,6 +41,7 @@ const StreamlitFlowComponent = (props) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState(props.args.edges);
   const [lastUpdateTimestamp, setLastUpdateTimestamp] = useState(props.args.timestamp);
   const [layoutNeedsUpdate, setLayoutNeedsUpdate] = useState(false);
+  const [overrideLayout, setOverrideLayout] = useState(false);
 
   const [layoutCalculated, setLayoutCalculated] = useState(false);
 
@@ -56,12 +57,14 @@ const StreamlitFlowComponent = (props) => {
 
   // Helper Functions
   const handleLayout = () => {
-    createElkGraphLayout(getNodes(), getEdges(), props.args.layoutOptions)
+    const layoutOptions = overrideLayout ? props.args.resetLayoutOptions : props.args.layoutOptions;
+    createElkGraphLayout(getNodes(), getEdges(), layoutOptions)
       .then(({ nodes, edges }) => {
         setNodes(nodes);
         setEdges(edges);
         setViewFitAfterLayout(false);
         handleDataReturnToStreamlit(nodes, edges, null);
+        setOverrideLayout(false);
         setLayoutCalculated(true);
       })
       .catch((err) => console.log(err));
@@ -237,6 +240,7 @@ const StreamlitFlowComponent = (props) => {
           <PaneConextMenu
             paneContextMenu={paneContextMenu}
             setPaneContextMenu={setPaneContextMenu}
+            setOverrideLayout={setOverrideLayout}
             nodes={nodes}
             edges={edges}
             setNodes={setNodes}

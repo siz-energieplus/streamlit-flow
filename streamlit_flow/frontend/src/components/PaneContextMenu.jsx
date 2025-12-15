@@ -114,10 +114,10 @@ const PaneConextMenu = ({
   setPaneContextMenu,
   nodes,
   edges,
-  layoutOptions,
   setNodes,
   handleDataReturnToStreamlit,
   setLayoutCalculated,
+  setOverrideLayout,
   theme,
 }) => {
   const [showModal, setShowModal] = useState(false);
@@ -129,6 +129,7 @@ const PaneConextMenu = ({
   };
 
   const handleLayoutReset = (e) => {
+    setOverrideLayout(true);
     setPaneContextMenu(null);
     setLayoutCalculated(false);
   };
