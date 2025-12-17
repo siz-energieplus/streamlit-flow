@@ -31,10 +31,16 @@ const EditNodeModal = ({
     setEditedNode((editedNode) => ({ ...editedNode, data: { ...editedNode.data, content: e.target.value } }));
   };
 
-  const onNodeDataChange = (key, newValue) => {
+  const onNodeInputValueChange = (key, newValue) => {
+    changeNodeInput(key, 'value', newValue);
+  };
+  const onNodeInputIncludedChange = (key, isIncluded) => {
+    changeNodeInput(key, 'isIncluded', isIncluded);
+  };
+  const changeNodeInput = (inputName, inputAttributeName, value) => {
     var resie_data = editedNode.data.resie_data;
-    var node_input = resie_data.find((obj) => obj.display_name === key);
-    node_input.value = newValue;
+    var node_input = resie_data.find((obj) => obj.display_name === inputName);
+    node_input[inputAttributeName] = value;
     editedNode.data.resie_data = resie_data;
     setEditedNode(editedNode);
   };
@@ -67,8 +73,12 @@ const EditNodeModal = ({
             </FloatingLabel>
           </Col>
         </Row>
-        <ResieInputMenu nodeInputObjects={editedNode.data.resie_data} onEdit={onNodeDataChange} />
       </Modal.Body>
+      <ResieInputMenu
+        nodeInputObjects={editedNode.data.resie_data}
+        onValueChange={onNodeInputValueChange}
+        onIncludedChange={onNodeInputIncludedChange}
+      />
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
           Close
