@@ -1,7 +1,7 @@
-import { Row, Col, FloatingLabel } from 'react-bootstrap';
-import CustomInputField from './CustomInputFields';
+import { Row, Col } from 'react-bootstrap';
+import CustomInputField from './CustomInputField';
 
-function CustomNodeMenuInputs({ nodeInputObjects, onEdit }) {
+function ResieInputMenu({ nodeInputObjects, onEdit }) {
   function chunk_into_rows(items_per_row) {
     var rows = [];
     var current_row = [];
@@ -37,4 +37,4 @@ function CustomNodeMenuInputs({ nodeInputObjects, onEdit }) {
   );
 }
 
-export default CustomNodeMenuInputs;
+export default ResieInputMenu;
