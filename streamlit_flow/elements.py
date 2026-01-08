@@ -1,5 +1,5 @@
 from typing import Dict, Tuple, Union, Type, TypeVar, Literal
-from nodeInput import NodeInput
+from node_input import NodeInput
 
 T_StreamlitFlowNode = TypeVar('T_StreamlitFlowNode', bound='StreamlitFlowNode')
 T_StreamlitFlowEdge = TypeVar('T_StreamlitFlowEdge', bound='StreamlitFlowEdge')
