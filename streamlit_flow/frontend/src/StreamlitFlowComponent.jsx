@@ -200,12 +200,17 @@ const StreamlitFlowComponent = (props) => {
     }
 
 
-    const handleConnect = (params) => {
-        const newEdgeId = `st-flow-edge_${params.source}-${params.target}`; 
-        const newEdges = addEdge({...params, animated:props.args["animateNewEdges"], labelShowBg:false, id: newEdgeId}, edges);
-        setEdges(newEdges);
-        handleDataReturnToStreamlit(nodes, newEdges, newEdgeId);
-    }
+  const handleConnect = (params) => {
+    var newEdgeId = `st-flow-edge_${params.source}-${params.target}`;
+    const edgeIdNumber = edges.filter((edge) => edge.source == params.source && edge.target == params.target).length;
+    newEdgeId += '_' + edgeIdNumber;
+    const newEdges = addEdge(
+      { ...params, animated: props.args['animateNewEdges'], labelShowBg: false, id: newEdgeId },
+      edges
+    );
+    setEdges(newEdges);
+    handleDataReturnToStreamlit(nodes, newEdges, newEdgeId);
+  };
 
     const handleNodeDragStop = (event, node) => {
         const updatedNodes = nodes.map(n => {
