@@ -1,7 +1,7 @@
 import os
 import streamlit.components.v1 as components
 
-
+import streamlit as st
 from .elements import StreamlitFlowNode, StreamlitFlowEdge
 from .layouts import Layout, ManualLayout, TreeLayout
 from .state import StreamlitFlowState
@@ -102,6 +102,9 @@ def streamlit_flow(key:str,
     
     if component_value is None:
         return state
+    
+    if "warning_message" in component_value:
+        st.session_state["warning_messages"] = [component_value["warning_message"]]
 
     new_state = StreamlitFlowState(
         nodes=[StreamlitFlowNode.from_dict(node) for node in component_value['nodes']],

@@ -74,7 +74,7 @@ const StreamlitFlowComponent = (props) => {
 
         const timestamp = (new Date()).getTime();
         setLastUpdateTimestamp(timestamp);
-        Streamlit.setComponentValue({'nodes': _nodes, 'edges': _edges, 'selectedId': selectedId, 'timestamp': timestamp});
+        Streamlit.setComponentValue({'nodes': _nodes, 'edges': _edges, 'selectedId': selectedId, 'timestamp': timestamp, "warning_message" : props.args.warning_message});
     }
 
     const calculateMenuPosition = (event) => {
