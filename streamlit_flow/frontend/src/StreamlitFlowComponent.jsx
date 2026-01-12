@@ -212,8 +212,7 @@ const StreamlitFlowComponent = (props) => {
     }
     // add new edge
     var newEdgeId = `st-flow-edge_${params.source}-${params.target}`;
-    const edgeIdNumber = edges.filter((edge) => edge.source == params.source && edge.target == params.target).length;
-    newEdgeId += '_' + edgeIdNumber;
+    newEdgeId += '_' + props.args.timestamp;
     const newEdges = addEdge(
       { ...params, animated: props.args['animateNewEdges'], labelShowBg: false, id: newEdgeId },
       edges
