@@ -201,6 +201,21 @@ const StreamlitFlowComponent = (props) => {
 
 
   const handleConnect = (params) => {
+    // check if its a valid connection
+    // edge is valid if its target and source handle are not already taken unless the node is a bus
+    var sourceIsBus = nodes.find((e) => e.id == params.source).data.component_type == "Bus";
+    var targetIsBus = nodes.find((e) => e.id == params.target).data.component_type == "Bus";
+    for (let i = 0; i < edges.length; i++) {
+      const edge = edges[i];
+      var sourceHandleTaken = edge.source == params.source && edge.sourceHandle == params.sourceHandle;
+      var targetHandleTaken = edge.target == params.target && edge.targetHandle == params.targetHandle;
+      if ((!sourceIsBus && sourceHandleTaken) || (!targetIsBus && targetHandleTaken)) {
+        props.args.warning_message = "Cannot attach two edges to the same Handle";
+        handleDataReturnToStreamlit(nodes, edges, null);
+        return;
+      }
+    }
+    // add new edge
     var newEdgeId = `st-flow-edge_${params.source}-${params.target}`;
     const edgeIdNumber = edges.filter((edge) => edge.source == params.source && edge.target == params.target).length;
     newEdgeId += '_' + edgeIdNumber;
