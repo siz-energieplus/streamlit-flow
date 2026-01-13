@@ -46,6 +46,7 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
           [...Array(sourceHandles)].map((_, i) => (
             <Handle
               id={`source-${i}`}
+              key={data.content + '_source-${i}'}
               className="custom-handle"
               type="source"
               position={sourcePos}
@@ -64,6 +65,7 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
           [...Array(targetHandles)].map((_, i) => (
             <Handle
               id={`target-${i}`}
+              key={data.content + '_target-${i}'}
               className="custom-handle"
               type="target"
               position={targetPos}
