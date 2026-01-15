@@ -1,9 +1,9 @@
 import os
 import streamlit.components.v1 as components
 
-
+import streamlit as st
 from .elements import StreamlitFlowNode, StreamlitFlowEdge
-from .layouts import Layout, ManualLayout
+from .layouts import Layout, ManualLayout, TreeLayout
 from .state import StreamlitFlowState
 
 _RELEASE = False
@@ -33,6 +33,7 @@ def streamlit_flow(key:str,
                     animate_new_edges:bool=False,
                     style:dict={},
                     layout:Layout=ManualLayout(),
+                    reset_layout:Layout=TreeLayout(direction='right'),
                     get_node_on_click:bool=False,
                     get_edge_on_click:bool=False,
                     pan_on_drag:bool=True,
@@ -83,6 +84,7 @@ def streamlit_flow(key:str,
                                         animateNewEdges=animate_new_edges,
                                         allowNewEdges=allow_new_edges,
                                         layoutOptions=layout.__to_dict__(),
+                                        resetLayoutOptions=reset_layout.__to_dict__(),
                                         getNodeOnClick=get_node_on_click,
                                         getEdgeOnClick=get_edge_on_click,
                                         panOnDrag=pan_on_drag,
@@ -100,6 +102,9 @@ def streamlit_flow(key:str,
     
     if component_value is None:
         return state
+    
+    if "warning_message" in component_value:
+        st.session_state["warning_messages"] = [component_value["warning_message"]]
 
     new_state = StreamlitFlowState(
         nodes=[StreamlitFlowNode.from_dict(node) for node in component_value['nodes']],
