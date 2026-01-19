@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import { Handle, Position } from 'reactflow';
 import Markdown from 'react-markdown';
+import Markdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -46,6 +47,7 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
           [...Array(sourceHandles)].map((_, i) => (
             <Handle
               id={`source-${i}`}
+              key={data.content + '_source-${i}'}
               className="custom-handle"
               type="source"
               position={sourcePos}
@@ -64,6 +66,7 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
           [...Array(targetHandles)].map((_, i) => (
             <Handle
               id={`target-${i}`}
+              key={data.content + '_target-${i}'}
               className="custom-handle"
               type="target"
               position={targetPos}
