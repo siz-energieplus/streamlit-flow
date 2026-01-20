@@ -14,55 +14,63 @@ function CustomInputField({ nodeInput, onEdit }) {
     onEdit(inputName, newInput);
   };
 
-  switch (js_type) {
-    case 'string':
-      return (
-        <FloatingLabel controlId="floatingInput" label={inputName}>
-          <Form.Control
-            type="text"
-            as="textarea"
-            style={{ height: '60px' }}
-            placeholder={inputName}
-            value={inputValue}
-            autoFocus
+  const getInputFieldByType = () => {
+    switch (js_type) {
+      case 'string':
+        return (
+          <FloatingLabel controlId="floatingInput" label={inputName}>
+            <Form.Control
+              type="text"
+              as="textarea"
+              style={{ height: '60px' }}
+              placeholder={inputName}
+              value={inputValue}
+              autoFocus
+              onChange={(e) => onInputChanged(e.target.value)}
+            />
+          </FloatingLabel>
+        );
+      case 'number':
+        return (
+          <FloatingLabel controlId="floatingInput" label={inputName}>
+            <Form.Control
+              type="number"
+              placeholder={inputName}
+              value={inputValue}
+              onChange={(e) => onInputChanged(e.target.value)}
+            />
+          </FloatingLabel>
+        );
+      case 'boolean':
+        return (
+          <Form.Check
+            type="switch"
+            id={inputName}
+            label={inputName}
+            defaultChecked={inputValue}
             onChange={(e) => onInputChanged(e.target.value)}
           />
-        </FloatingLabel>
-      );
-    case 'number':
-      return (
-        <FloatingLabel controlId="floatingInput" label={inputName}>
-          <Form.Control
-            type="number"
-            placeholder={inputName}
-            value={inputValue}
-            onChange={(e) => onInputChanged(e.target.value)}
+        );
+      case 'dropdown':
+        return (
+          <CustomDropdown
+            inputName={inputName}
+            startValue={startValue}
+            dropdown_options={nodeInput.dropdown_options}
+            onEdit={onEdit}
           />
-        </FloatingLabel>
-      );
-    case 'boolean':
-      return (
-        <Form.Check
-          type="switch"
-          id={inputName}
-          label={inputName}
-          defaultChecked={inputValue}
-          onChange={(e) => onInputChanged(e.target.value)}
-        />
-      );
-    case 'dropdown':
-      return (
-        <CustomDropdown
-          inputName={inputName}
-          startValue={startValue}
-          dropdown_options={nodeInput.dropdown_options}
-          onEdit={onEdit}
-        />
-      );
-    default:
-      // throw new Error('Type does not have a custom input field: ' + typeof startValue);
-      console.log('Input ' + { inputName } + ' has type that is not defined yet.');
-  }
+        );
+      default:
+        // throw new Error('Type does not have a custom input field: ' + typeof startValue);
+        console.log('Input ' + { inputName } + ' has type that is not defined yet.');
+    }
+  };
+
+  return (
+    <div data-toggle="tooltip" data-placement="top" title={nodeInput.tooltip}>
+      {getInputFieldByType()}
+    </div>
+  );
 }
 
 export default CustomInputField;
