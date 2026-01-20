@@ -3,7 +3,7 @@ import { Form, FloatingLabel, Dropdown } from 'react-bootstrap';
 import CustomDropdown from './CustomDropdown';
 
 function CustomInputField({ nodeInput, onEdit }) {
-  var inputName = nodeInput.display_name;
+  var displayName = nodeInput.display_name;
   var startValue = nodeInput.value;
   var js_type = nodeInput.js_type;
   const [inputValue, setInputValue] = useState(startValue);
@@ -11,19 +11,19 @@ function CustomInputField({ nodeInput, onEdit }) {
   const onInputChanged = (newInput) => {
     if (js_type === 'boolean') newInput = !inputValue;
     setInputValue(newInput);
-    onEdit(inputName, newInput);
+    onEdit(nodeInput.resie_name, newInput);
   };
 
   const getInputFieldByType = () => {
     switch (js_type) {
       case 'string':
         return (
-          <FloatingLabel controlId="floatingInput" label={inputName}>
+          <FloatingLabel controlId="floatingInput" label={displayName}>
             <Form.Control
               type="text"
               as="textarea"
               style={{ height: '60px' }}
-              placeholder={inputName}
+              placeholder={displayName}
               value={inputValue}
               autoFocus
               onChange={(e) => onInputChanged(e.target.value)}
@@ -32,10 +32,10 @@ function CustomInputField({ nodeInput, onEdit }) {
         );
       case 'number':
         return (
-          <FloatingLabel controlId="floatingInput" label={inputName}>
+          <FloatingLabel controlId="floatingInput" label={displayName}>
             <Form.Control
               type="number"
-              placeholder={inputName}
+              placeholder={displayName}
               value={inputValue}
               onChange={(e) => onInputChanged(e.target.value)}
             />
@@ -45,8 +45,8 @@ function CustomInputField({ nodeInput, onEdit }) {
         return (
           <Form.Check
             type="switch"
-            id={inputName}
-            label={inputName}
+            id={displayName}
+            label={displayName}
             defaultChecked={inputValue}
             onChange={(e) => onInputChanged(e.target.value)}
           />
@@ -54,18 +54,19 @@ function CustomInputField({ nodeInput, onEdit }) {
       case 'dropdown':
         return (
           <CustomDropdown
-            inputName={inputName}
+            displayName={displayName}
             startValue={startValue}
             dropdown_options={nodeInput.dropdown_options}
-            onEdit={onEdit}
+            onEdit={onInputChanged}
           />
         );
       default:
         // throw new Error('Type does not have a custom input field: ' + typeof startValue);
-        console.log('Input ' + { inputName } + ' has type that is not defined yet.');
+        console.log('Input ' + { inputName: displayName } + ' has type that is not defined yet.');
     }
   };
 
+  console.log(nodeInput.tooltip);
   return (
     <div data-toggle="tooltip" data-placement="top" title={nodeInput.tooltip}>
       {getInputFieldByType()}

@@ -37,9 +37,9 @@ const EditNodeModal = ({
   const onNodeInputIncludedChange = (key, isIncluded) => {
     changeNodeInput(key, 'isIncluded', isIncluded);
   };
-  const changeNodeInput = (inputName, inputAttributeName, value) => {
+  const changeNodeInput = (resieName, inputAttributeName, value) => {
     var resie_data = editedNode.data.resie_data;
-    var node_input = resie_data.find((obj) => obj.display_name === inputName);
+    var node_input = resie_data.find((obj) => obj.resie_name === resieName);
     node_input[inputAttributeName] = value;
     editedNode.data.resie_data = resie_data;
     setEditedNode(editedNode);

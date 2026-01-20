@@ -18,17 +18,17 @@ function OptionalInputMenu({ optionalInputObjects, onValueChange, onIncludedChan
 }
 
 function OptionalInputField({ nodeInput, onValueChange, startIncluded, onIncludedChange }) {
-  const inputName = nodeInput.display_name;
+  const resieName = nodeInput.resie_name;
   const [isIncluded, setIncluded] = useState(startIncluded);
 
   const onSwitchClicked = (newInput) => {
     setIncluded(!isIncluded);
-    onIncludedChange(inputName, !isIncluded);
+    onIncludedChange(resieName, !isIncluded);
   };
   const onValueFieldEdit = (key, newValue) => {
     setIncluded(true);
-    onIncludedChange(inputName, true);
-    onValueChange(inputName, newValue);
+    onIncludedChange(resieName, true);
+    onValueChange(resieName, newValue);
   };
 
   return (
@@ -37,7 +37,7 @@ function OptionalInputField({ nodeInput, onValueChange, startIncluded, onInclude
         <Form.Check
           type="switch"
           checked={isIncluded}
-          id={inputName}
+          id={resieName}
           label={'include?'}
           defaultChecked={isIncluded}
           onChange={onSwitchClicked}
