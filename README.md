@@ -94,6 +94,7 @@ streamlit run example.py
 * Support for serializing and deserializing Node data
 * Ensure all edge IDs are unique and that edges cannot connect to handles that already have an edge attached to them
 * Let Streamlit Flow send warning messages to the frontend to display
+* Node Context Menu includes input fields for Resie Node Parameters
 
 ## Change log
 
