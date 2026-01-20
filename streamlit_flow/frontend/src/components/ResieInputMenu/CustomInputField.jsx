@@ -1,7 +1,11 @@
 import { useState } from 'react';
-import { Form, FloatingLabel } from 'react-bootstrap';
+import { Form, FloatingLabel, Dropdown } from 'react-bootstrap';
+import CustomDropdown from './CustomDropdown';
 
-function CustomInputField({ inputName, startValue, js_type, onEdit }) {
+function CustomInputField({ nodeInput, onEdit }) {
+  var inputName = nodeInput.display_name;
+  var startValue = nodeInput.value;
+  var js_type = nodeInput.js_type;
   const [inputValue, setInputValue] = useState(startValue);
 
   const onInputChanged = (newInput) => {
@@ -43,11 +47,18 @@ function CustomInputField({ inputName, startValue, js_type, onEdit }) {
           id={inputName}
           label={inputName}
           defaultChecked={inputValue}
-          // value={inputValue}
           onChange={(e) => onInputChanged(e.target.value)}
         />
       );
-    case 'object':
+    case 'dropdown':
+      return (
+        <CustomDropdown
+          inputName={inputName}
+          startValue={startValue}
+          dropdown_options={nodeInput.dropdown_options}
+          onEdit={onEdit}
+        />
+      );
     default:
       // throw new Error('Type does not have a custom input field: ' + typeof startValue);
       console.log('Input ' + { inputName } + ' has type that is not defined yet.');

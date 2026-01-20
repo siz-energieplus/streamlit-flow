@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
 import { Handle, Position } from 'reactflow';
 import Markdown from 'react-markdown';
-import Markdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';

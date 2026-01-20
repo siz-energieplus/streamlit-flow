@@ -13,6 +13,9 @@ function RequiredInputMenu({ requiredInputObjects, onEdit }) {
         current_row = [];
       }
     });
+    if (current_row.length > 0) {
+      rows.push(current_row);
+    }
     return rows;
   }
 
@@ -21,14 +24,9 @@ function RequiredInputMenu({ requiredInputObjects, onEdit }) {
     <>
       {rows.map((pair) => (
         <Row className="g-2 mt-1 mt-md-0">
-          {pair.map((node_input) => (
+          {pair.map((nodeInput) => (
             <Col md>
-              <CustomInputField
-                inputName={node_input.display_name}
-                startValue={node_input.value}
-                onEdit={onEdit}
-                js_type={node_input.js_type}
-              />
+              <CustomInputField nodeInput={nodeInput} onEdit={onEdit} />
             </Col>
           ))}
         </Row>

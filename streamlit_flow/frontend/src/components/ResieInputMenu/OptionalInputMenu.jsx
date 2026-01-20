@@ -5,13 +5,11 @@ import { useState } from 'react';
 function OptionalInputMenu({ optionalInputObjects, onValueChange, onIncludedChange }) {
   return (
     <>
-      {optionalInputObjects.map((node_input) => (
+      {optionalInputObjects.map((nodeInput) => (
         <OptionalInputField
-          inputName={node_input.display_name}
-          js_type={node_input.js_type}
-          startValue={node_input.value}
+          nodeInput={nodeInput}
           onValueChange={onValueChange}
-          startIncluded={node_input.isIncluded}
+          startIncluded={nodeInput.isIncluded}
           onIncludedChange={onIncludedChange}
         />
       ))}
@@ -19,7 +17,8 @@ function OptionalInputMenu({ optionalInputObjects, onValueChange, onIncludedChan
   );
 }
 
-function OptionalInputField({ inputName, js_type, startValue, onValueChange, startIncluded, onIncludedChange }) {
+function OptionalInputField({ nodeInput, onValueChange, startIncluded, onIncludedChange }) {
+  const inputName = nodeInput.display_name;
   const [isIncluded, setIncluded] = useState(startIncluded);
 
   const onSwitchClicked = (newInput) => {
@@ -45,7 +44,7 @@ function OptionalInputField({ inputName, js_type, startValue, onValueChange, sta
         />
       </Col>
       <Col md>
-        <CustomInputField inputName={inputName} startValue={startValue} onEdit={onValueFieldEdit} js_type={js_type} />
+        <CustomInputField nodeInput={nodeInput} onEdit={onValueFieldEdit} />
       </Col>
     </Row>
   );
