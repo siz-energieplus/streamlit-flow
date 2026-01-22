@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import ResieInputMenu from './ResieInputMenu/ResieInputMenu';
 
 const EditNodeModal = ({
   show,
@@ -28,6 +29,20 @@ const EditNodeModal = ({
 
   const onNodeContentChange = (e) => {
     setEditedNode((editedNode) => ({ ...editedNode, data: { ...editedNode.data, content: e.target.value } }));
+  };
+
+  const onNodeInputValueChange = (key, newValue) => {
+    changeNodeInput(key, 'value', newValue);
+  };
+  const onNodeInputIncludedChange = (key, isIncluded) => {
+    changeNodeInput(key, 'isIncluded', isIncluded);
+  };
+  const changeNodeInput = (resieName, inputAttributeName, value) => {
+    var resie_data = editedNode.data.resie_data;
+    var node_input = resie_data.find((obj) => obj.resie_name === resieName);
+    node_input[inputAttributeName] = value;
+    editedNode.data.resie_data = resie_data;
+    setEditedNode(editedNode);
   };
 
   const handleSaveChanges = (e) => {
@@ -59,6 +74,11 @@ const EditNodeModal = ({
           </Col>
         </Row>
       </Modal.Body>
+      <ResieInputMenu
+        nodeInputObjects={editedNode.data.resie_data}
+        onValueChange={onNodeInputValueChange}
+        onIncludedChange={onNodeInputIncludedChange}
+      />
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
           Close
