@@ -1,7 +1,7 @@
 import { Row, Col } from 'react-bootstrap';
 import CustomInputField from './CustomInputField';
 
-function RequiredInputMenu({ requiredInputObjects, onEdit }) {
+function RequiredInputMenu({ requiredInputObjects, onEdit, mediums }) {
   function chunk_into_rows(items_per_row) {
     var rows = [];
     var current_row = [];
@@ -26,7 +26,7 @@ function RequiredInputMenu({ requiredInputObjects, onEdit }) {
         <Row className="g-2 mt-1 mt-md-0">
           {pair.map((nodeInput) => (
             <Col md>
-              <CustomInputField nodeInput={nodeInput} onEdit={onEdit} />
+              <CustomInputField nodeInput={nodeInput} onEdit={onEdit} mediums={mediums} />
             </Col>
           ))}
         </Row>

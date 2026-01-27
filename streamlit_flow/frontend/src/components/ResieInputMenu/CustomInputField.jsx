@@ -2,11 +2,18 @@ import { useState } from 'react';
 import { Form, FloatingLabel, Dropdown } from 'react-bootstrap';
 import CustomDropdown from './CustomDropdown';
 
-function CustomInputField({ nodeInput, onEdit }) {
+function CustomInputField({ nodeInput, onEdit, mediums }) {
   var displayName = nodeInput.display_name;
   var startValue = nodeInput.value;
   var js_type = nodeInput.js_type;
   const [inputValue, setInputValue] = useState(startValue);
+
+  // if this is a medium, make the options the mediums
+  if (nodeInput.is_medium) {
+    js_type = 'dropdown';
+    nodeInput.dropdown_options = mediums.map((m) => m.key);
+    nodeInput.dropdown_options_display_names = mediums.map((m) => m.name);
+  }
 
   const onInputChanged = (newInput) => {
     if (js_type === 'boolean') newInput = !inputValue;
@@ -57,6 +64,7 @@ function CustomInputField({ nodeInput, onEdit }) {
             displayName={displayName}
             startValue={startValue}
             dropdown_options={nodeInput.dropdown_options}
+            dropdown_options_display_names={nodeInput.dropdown_options_display_names}
             onEdit={onInputChanged}
           />
         );

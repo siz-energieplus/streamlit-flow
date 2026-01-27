@@ -3,7 +3,7 @@ import CustomInputField from './CustomInputField';
 import RequiredInputMenu from './RequiredInputMenu';
 import OptionalInputMenu from './OptionalInputMenu';
 
-function ResieInputMenu({ nodeInputObjects, onValueChange, onIncludedChange }) {
+function ResieInputMenu({ nodeInputObjects, onValueChange, onIncludedChange, mediums }) {
   let requiredInputs = nodeInputObjects.filter((obj) => obj.required);
   let optionalInputs = nodeInputObjects.filter((obj) => !obj.required);
 
@@ -11,7 +11,7 @@ function ResieInputMenu({ nodeInputObjects, onValueChange, onIncludedChange }) {
     <>
       <Modal.Body>
         <Modal.Header>Required Inputs</Modal.Header>
-        <RequiredInputMenu requiredInputObjects={requiredInputs} onEdit={onValueChange} />
+        <RequiredInputMenu requiredInputObjects={requiredInputs} onEdit={onValueChange} mediums={mediums} />
       </Modal.Body>
       <Modal.Body>
         <Modal.Header>Optional Inputs</Modal.Header>
