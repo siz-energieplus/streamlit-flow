@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useContext } from 'react';
 import { Handle, Position } from 'reactflow';
 import Markdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
@@ -8,6 +8,8 @@ import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
 import 'katex/dist/katex.min.css';
 import 'highlight.js/styles/github.css';
+
+import { AppContext } from './AppContext';
 
 const handlePosMap = {
   top: Position.Top,
@@ -25,12 +27,18 @@ const MemoizedMarkdown = memo(({ content }) => (
   </Markdown>
 ));
 
-function styleArgs(pos, n, i) {
+function styleArgs(pos, n, i, handleColor) {
+  let style = {
+    background: handleColor,
+    borderColor: '#ffffff',
+  };
+
   if (pos === Position.Left || pos === Position.Right) {
-    return { top: `${(i + 1) * (100.0 / (n + 1))}%` };
+    style.top = `${(i + 1) * (100.0 / (n + 1))}%`;
   } else {
-    return { left: `${(i + 1) * (100.0 / (n + 1))}%` };
+    style.left = `${(i + 1) * (100.0 / (n + 1))}%`;
   }
+  return style;
 }
 
 function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
@@ -38,6 +46,19 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
   const targetHandles = data.targetHandles !== undefined ? data.targetHandles : 0;
   const sourcePos = sourcePosition && (handlePosMap[sourcePosition] || Position.Right);
   const targetPos = targetPosition && (handlePosMap[targetPosition] || Position.Left);
+  const mediums = useContext(AppContext).mediums;
+
+  function getHandleColor(isSource, handleIndex) {
+    // get the variable name for the medium that sets this handle's color
+    let key = isSource ? 'source' : 'target';
+    let colorList = data.handle_color_dict[key];
+    let variableName = colorList[handleIndex];
+    // find the medium that is set in this variable
+    let mediumNodeInput = data.resie_data.find((x) => x.resie_name == variableName);
+    //find the medium object (from global context) with this name
+    let medium = mediums.find((x) => x.key == mediumNodeInput.value);
+    return medium.color;
+  }
 
   return (
     <>
@@ -51,7 +72,7 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
               type="source"
               position={sourcePos}
               isConnectable
-              style={styleArgs(sourcePos, sourceHandles, i)}
+              style={styleArgs(sourcePos, sourceHandles, i, getHandleColor(true, i))}
             />
           ))}
       </div>
@@ -70,7 +91,7 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
               type="target"
               position={targetPos}
               isConnectable
-              style={styleArgs(targetPos, targetHandles, i)}
+              style={styleArgs(targetPos, targetHandles, i, getHandleColor(false, i))}
             />
           ))}
       </div>

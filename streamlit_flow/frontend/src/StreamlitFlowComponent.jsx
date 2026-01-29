@@ -19,6 +19,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 
 import './style.css';
 
+import { AppContext } from './components/AppContext';
 import { MarkdownInputNode, MarkdownOutputNode, MarkdownDefaultNode } from './components/MarkdownNode';
 import PaneConextMenu from './components/PaneContextMenu';
 import NodeContextMenu from './components/NodeContextMenu';
@@ -229,75 +230,78 @@ const StreamlitFlowComponent = (props) => {
     handleDataReturnToStreamlit(updatedNodes, edges, null);
   };
 
+  const susiContext = { mediums: props.args.additionalData.mediums };
   return (
     <div style={{ height: props.args.height }}>
-      <ReactFlow
-        nodeTypes={nodeTypes}
-        ref={ref}
-        nodes={nodes}
-        onNodesChange={onNodesChange}
-        onNodeDragStop={handleNodeDragStop}
-        edges={edges}
-        onEdgesChange={onEdgesChange}
-        onConnect={props.args.allowNewEdges ? handleConnect : null}
-        fitView={props.args.fitView}
-        style={props.args.style}
-        onNodeClick={handleNodeClick}
-        onEdgeClick={handleEdgeClick}
-        onNodeDragStart={clearMenus}
-        onPaneClick={handlePaneClick}
-        onPaneContextMenu={props.args.enablePaneMenu ? handlePaneContextMenu : (event) => {}}
-        onNodeContextMenu={props.args.enableNodeMenu ? handleNodeContextMenu : (event, node) => {}}
-        onEdgeContextMenu={props.args.enableEdgeMenu ? handleEdgeContextMenu : (event, edge) => {}}
-        panOnDrag={props.args.panOnDrag}
-        zoomOnDoubleClick={props.args.allowZoom}
-        zoomOnScroll={props.args.allowZoom}
-        zoomOnPinch={props.args.allowZoom}
-        minZoom={props.args.minZoom}
-        defaultEdgeOptions={props.args.defaultEdgeOptions}
-        proOptions={{ hideAttribution: props.args.hideWatermark }}
-      >
-        <Background />
-        {paneContextMenu && (
-          <PaneConextMenu
-            paneContextMenu={paneContextMenu}
-            setPaneContextMenu={setPaneContextMenu}
-            setOverrideLayout={setOverrideLayout}
-            nodes={nodes}
-            edges={edges}
-            setNodes={setNodes}
-            handleDataReturnToStreamlit={handleDataReturnToStreamlit}
-            setLayoutCalculated={setLayoutCalculated}
-            theme={props.theme}
-          />
-        )}
-        {nodeContextMenu && (
-          <NodeContextMenu
-            nodeContextMenu={nodeContextMenu}
-            setNodeContextMenu={setNodeContextMenu}
-            nodes={nodes}
-            edges={edges}
-            setNodes={setNodes}
-            setEdges={setEdges}
-            handleDataReturnToStreamlit={handleDataReturnToStreamlit}
-            theme={props.theme}
-            mediums={props.args.additionalData.mediums}
-          />
-        )}
-        {edgeContextMenu && (
-          <EdgeContextMenu
-            edgeContextMenu={edgeContextMenu}
-            setEdgeContextMenu={setEdgeContextMenu}
-            nodes={nodes}
-            edges={edges}
-            setEdges={setEdges}
-            handleDataReturnToStreamlit={handleDataReturnToStreamlit}
-            theme={props.theme}
-          />
-        )}
-        {props.args['showControls'] && <Controls />}
-        {props.args['showMiniMap'] && <MiniMap pannable zoomable />}
-      </ReactFlow>
+      <AppContext.Provider value={susiContext}>
+        <ReactFlow
+          nodeTypes={nodeTypes}
+          ref={ref}
+          nodes={nodes}
+          onNodesChange={onNodesChange}
+          onNodeDragStop={handleNodeDragStop}
+          edges={edges}
+          onEdgesChange={onEdgesChange}
+          onConnect={props.args.allowNewEdges ? handleConnect : null}
+          fitView={props.args.fitView}
+          style={props.args.style}
+          onNodeClick={handleNodeClick}
+          onEdgeClick={handleEdgeClick}
+          onNodeDragStart={clearMenus}
+          onPaneClick={handlePaneClick}
+          onPaneContextMenu={props.args.enablePaneMenu ? handlePaneContextMenu : (event) => {}}
+          onNodeContextMenu={props.args.enableNodeMenu ? handleNodeContextMenu : (event, node) => {}}
+          onEdgeContextMenu={props.args.enableEdgeMenu ? handleEdgeContextMenu : (event, edge) => {}}
+          panOnDrag={props.args.panOnDrag}
+          zoomOnDoubleClick={props.args.allowZoom}
+          zoomOnScroll={props.args.allowZoom}
+          zoomOnPinch={props.args.allowZoom}
+          minZoom={props.args.minZoom}
+          defaultEdgeOptions={props.args.defaultEdgeOptions}
+          proOptions={{ hideAttribution: props.args.hideWatermark }}
+        >
+          <Background />
+          {paneContextMenu && (
+            <PaneConextMenu
+              paneContextMenu={paneContextMenu}
+              setPaneContextMenu={setPaneContextMenu}
+              setOverrideLayout={setOverrideLayout}
+              nodes={nodes}
+              edges={edges}
+              setNodes={setNodes}
+              handleDataReturnToStreamlit={handleDataReturnToStreamlit}
+              setLayoutCalculated={setLayoutCalculated}
+              theme={props.theme}
+            />
+          )}
+          {nodeContextMenu && (
+            <NodeContextMenu
+              nodeContextMenu={nodeContextMenu}
+              setNodeContextMenu={setNodeContextMenu}
+              nodes={nodes}
+              edges={edges}
+              setNodes={setNodes}
+              setEdges={setEdges}
+              handleDataReturnToStreamlit={handleDataReturnToStreamlit}
+              theme={props.theme}
+              mediums={props.args.additionalData.mediums}
+            />
+          )}
+          {edgeContextMenu && (
+            <EdgeContextMenu
+              edgeContextMenu={edgeContextMenu}
+              setEdgeContextMenu={setEdgeContextMenu}
+              nodes={nodes}
+              edges={edges}
+              setEdges={setEdges}
+              handleDataReturnToStreamlit={handleDataReturnToStreamlit}
+              theme={props.theme}
+            />
+          )}
+          {props.args['showControls'] && <Controls />}
+          {props.args['showMiniMap'] && <MiniMap pannable zoomable />}
+        </ReactFlow>
+      </AppContext.Provider>
     </div>
   );
 };

@@ -69,12 +69,11 @@ function CustomInputField({ nodeInput, onEdit, mediums }) {
           />
         );
       default:
-        // throw new Error('Type does not have a custom input field: ' + typeof startValue);
         console.log('Input ' + { inputName: displayName } + ' has type that is not defined yet.');
     }
   };
 
-  console.log(nodeInput.tooltip);
+  // console.log(nodeInput.tooltip);
   return (
     <div data-toggle="tooltip" data-placement="top" title={nodeInput.tooltip}>
       {getInputFieldByType()}
