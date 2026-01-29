@@ -1,12 +1,14 @@
-import { useState } from 'react';
-import { Form, FloatingLabel, Dropdown } from 'react-bootstrap';
+import { useState, useContext } from 'react';
+import { Form, FloatingLabel } from 'react-bootstrap';
 import CustomDropdown from './CustomDropdown';
+import { AppContext } from './../AppContext';
 
-function CustomInputField({ nodeInput, onEdit, mediums }) {
+function CustomInputField({ nodeInput, onEdit }) {
   var displayName = nodeInput.display_name;
   var startValue = nodeInput.value;
   var js_type = nodeInput.js_type;
   const [inputValue, setInputValue] = useState(startValue);
+  const mediums = useContext(AppContext).mediums;
 
   // if this is a medium, make the options the mediums
   if (nodeInput.is_medium) {

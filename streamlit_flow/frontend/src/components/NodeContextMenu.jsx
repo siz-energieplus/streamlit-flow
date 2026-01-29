@@ -19,7 +19,6 @@ const EditNodeModal = ({
   nodes,
   edges,
   handleDataReturnToStreamlit,
-  mediums,
 }) => {
   const [editedNode, setEditedNode] = useState(node);
 
@@ -79,7 +78,6 @@ const EditNodeModal = ({
         nodeInputObjects={editedNode.data.resie_data}
         onValueChange={onNodeInputValueChange}
         onIncludedChange={onNodeInputIncludedChange}
-        mediums={mediums}
       />
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
@@ -102,7 +100,6 @@ const NodeContextMenu = ({
   setEdges,
   theme,
   handleDataReturnToStreamlit,
-  mediums,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalClosing, setModalClosing] = useState(false);
@@ -171,7 +168,6 @@ const NodeContextMenu = ({
         setModalClosing={setModalClosing}
         setNodes={setNodes}
         handleDataReturnToStreamlit={handleDataReturnToStreamlit}
-        mediums={mediums}
       />
     </>
   );

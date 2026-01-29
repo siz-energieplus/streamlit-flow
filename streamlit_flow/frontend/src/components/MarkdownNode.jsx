@@ -57,6 +57,7 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
     let mediumNodeInput = data.resie_data.find((x) => x.resie_name == variableName);
     //find the medium object (from global context) with this name
     let medium = mediums.find((x) => x.key == mediumNodeInput.value);
+    if (!medium) return '#ffffff';
     return medium.color;
   }
 
