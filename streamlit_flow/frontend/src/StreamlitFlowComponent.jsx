@@ -24,6 +24,7 @@ import { MarkdownInputNode, MarkdownOutputNode, MarkdownDefaultNode } from './co
 import PaneConextMenu from './components/PaneContextMenu';
 import NodeContextMenu from './components/NodeContextMenu';
 import EdgeContextMenu from './components/EdgeContextMenu';
+import { isHandleTaken, handlesShareMedium } from './HandleUtils';
 
 import createElkGraphLayout from './layouts/ElkLayout';
 
@@ -55,6 +56,8 @@ const StreamlitFlowComponent = (props) => {
   const ref = useRef(null);
   const reactFlowInstance = useReactFlow();
   const { fitView, getNodes, getEdges } = useReactFlow();
+
+  const susiContext = { mediums: props.args.additionalData.mediums };
 
   // Helper Functions
   const handleLayout = () => {
@@ -197,19 +200,18 @@ const StreamlitFlowComponent = (props) => {
   };
 
   const handleConnect = (params) => {
+    let sourceNode = nodes.find((e) => e.id == params.source);
+    let targetNode = nodes.find((e) => e.id == params.target);
     // check if its a valid connection
-    // edge is valid if its target and source handle are not already taken unless the node is a bus
-    var sourceIsBus = nodes.find((e) => e.id == params.source).data.component_type == 'Bus';
-    var targetIsBus = nodes.find((e) => e.id == params.target).data.component_type == 'Bus';
-    for (let i = 0; i < edges.length; i++) {
-      const edge = edges[i];
-      var sourceHandleTaken = edge.source == params.source && edge.sourceHandle == params.sourceHandle;
-      var targetHandleTaken = edge.target == params.target && edge.targetHandle == params.targetHandle;
-      if ((!sourceIsBus && sourceHandleTaken) || (!targetIsBus && targetHandleTaken)) {
-        props.args.warning_message = 'Cannot attach two edges to the same Handle';
-        handleDataReturnToStreamlit(nodes, edges, null);
-        return;
-      }
+    if (isHandleTaken(params, sourceNode, targetNode, edges)) {
+      props.args.warning_message = 'Cannot attach two edges to the same Handle';
+      handleDataReturnToStreamlit(nodes, edges, null);
+      return;
+    }
+    if (!handlesShareMedium(params, sourceNode, targetNode, susiContext.mediums)) {
+      props.args.warning_message = 'The mediums of these handles do not match or are undefined.';
+      handleDataReturnToStreamlit(nodes, edges, null);
+      return;
     }
     // add new edge
     var newEdgeId = `st-flow-edge_${params.source}-${params.target}`;
@@ -230,7 +232,6 @@ const StreamlitFlowComponent = (props) => {
     handleDataReturnToStreamlit(updatedNodes, edges, null);
   };
 
-  const susiContext = { mediums: props.args.additionalData.mediums };
   return (
     <div style={{ height: props.args.height }}>
       <AppContext.Provider value={susiContext}>

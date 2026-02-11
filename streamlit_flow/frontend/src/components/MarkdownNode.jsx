@@ -10,6 +10,7 @@ import 'katex/dist/katex.min.css';
 import 'highlight.js/styles/github.css';
 
 import { AppContext } from './AppContext';
+import { getMediumFromHandle } from '../HandleUtils';
 
 const handlePosMap = {
   top: Position.Top,
@@ -48,15 +49,8 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
   const targetPos = targetPosition && (handlePosMap[targetPosition] || Position.Left);
   const mediums = useContext(AppContext).mediums;
 
-  function getHandleColor(isSource, handleIndex) {
-    // get the variable name for the medium that sets this handle's color
-    let key = isSource ? 'source' : 'target';
-    let colorList = data.handle_color_dict[key];
-    let variableName = colorList[handleIndex];
-    // find the medium that is set in this variable
-    let mediumNodeInput = data.resie_data.find((x) => x.resie_name == variableName);
-    //find the medium object (from global context) with this name
-    let medium = mediums.find((x) => x.key == mediumNodeInput.value);
+  function getHandleColor(key, handleIndex) {
+    let medium = getMediumFromHandle(key, handleIndex, data, mediums);
     if (!medium) return '#ffffff';
     return medium.color;
   }
@@ -73,7 +67,7 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
               type="source"
               position={sourcePos}
               isConnectable
-              style={styleArgs(sourcePos, sourceHandles, i, getHandleColor(true, i))}
+              style={styleArgs(sourcePos, sourceHandles, i, getHandleColor('source', i))}
             />
           ))}
       </div>
@@ -92,7 +86,7 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
               type="target"
               position={targetPos}
               isConnectable
-              style={styleArgs(targetPos, targetHandles, i, getHandleColor(false, i))}
+              style={styleArgs(targetPos, targetHandles, i, getHandleColor('target', i))}
             />
           ))}
       </div>

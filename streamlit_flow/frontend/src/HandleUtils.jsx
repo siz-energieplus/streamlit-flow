@@ -1,0 +1,39 @@
+function isHandleTaken(params, sourceNode, targetNode, edges) {
+  // edge is valid if its target and source handle are not already taken unless the node is a bus
+  var sourceIsBus = sourceNode.data.component_type == 'Bus';
+  var targetIsBus = targetNode.data.component_type == 'Bus';
+  for (let i = 0; i < edges.length; i++) {
+    const edge = edges[i];
+    var sourceHandleTaken = edge.source == params.source && edge.sourceHandle == params.sourceHandle;
+    var targetHandleTaken = edge.target == params.target && edge.targetHandle == params.targetHandle;
+    if ((!sourceIsBus && sourceHandleTaken) || (!targetIsBus && targetHandleTaken)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function handlesShareMedium(params, sourceNode, targetNode, mediums) {
+  let sourceMedium = getMediumFromHandleName(params.sourceHandle, sourceNode.data, mediums);
+  if (sourceMedium.key === 'UNDEFINED') return false;
+  let targetMedium = getMediumFromHandleName(params.targetHandle, targetNode.data, mediums);
+  return sourceMedium.key == targetMedium.key;
+}
+
+function getMediumFromHandleName(handleName, nodeData, mediums) {
+  let splitName = handleName.split('-');
+  return getMediumFromHandle(splitName[0], parseInt(splitName[1]), nodeData, mediums);
+}
+
+function getMediumFromHandle(key, handleIndex, nodeData, mediums) {
+  // get the variable name for the medium that sets this handle's color
+  let mediumPerHandle = nodeData.handle_medium_dict[key];
+  let variableName = mediumPerHandle[handleIndex];
+  // find the medium that is set in this variable
+  let mediumNodeInput = nodeData.resie_data.find((x) => x.resie_name === variableName);
+  //find the medium object (from global context) with this name
+  let medium = mediums.find((x) => x.key === mediumNodeInput.value);
+  return medium;
+}
+
+export { isHandleTaken, getMediumFromHandle, handlesShareMedium };
