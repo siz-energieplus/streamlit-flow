@@ -13,11 +13,13 @@ function isHandleTaken(params, sourceNode, targetNode, edges) {
   return false;
 }
 
-function handlesShareMedium(params, sourceNode, targetNode, mediums) {
-  let sourceMedium = getMediumFromHandleName(params.sourceHandle, sourceNode.data, mediums);
-  if (sourceMedium.key === 'UNDEFINED') return false;
-  let targetMedium = getMediumFromHandleName(params.targetHandle, targetNode.data, mediums);
-  return sourceMedium.key == targetMedium.key;
+function getHandleMedium(handleName, node, mediums) {
+  let medium = getMediumFromHandleName(handleName, node.data, mediums);
+  return medium;
+}
+
+function mediumsMatch(m1, m2) {
+  return m1.key != 'UNDEFINED' && m1.key === m2.key;
 }
 
 function getMediumFromHandleName(handleName, nodeData, mediums) {
@@ -36,4 +38,4 @@ function getMediumFromHandle(key, handleIndex, nodeData, mediums) {
   return medium;
 }
 
-export { isHandleTaken, getMediumFromHandle, handlesShareMedium };
+export { isHandleTaken, getMediumFromHandle, getHandleMedium, mediumsMatch };

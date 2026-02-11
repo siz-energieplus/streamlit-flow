@@ -24,7 +24,7 @@ import { MarkdownInputNode, MarkdownOutputNode, MarkdownDefaultNode } from './co
 import PaneConextMenu from './components/PaneContextMenu';
 import NodeContextMenu from './components/NodeContextMenu';
 import EdgeContextMenu from './components/EdgeContextMenu';
-import { isHandleTaken, handlesShareMedium } from './HandleUtils';
+import { isHandleTaken, getHandleMedium, mediumsMatch } from './HandleUtils';
 
 import createElkGraphLayout from './layouts/ElkLayout';
 
@@ -208,7 +208,9 @@ const StreamlitFlowComponent = (props) => {
       handleDataReturnToStreamlit(nodes, edges, null);
       return;
     }
-    if (!handlesShareMedium(params, sourceNode, targetNode, susiContext.mediums)) {
+    let sourceMedium = getHandleMedium(params.sourceHandle, sourceNode, susiContext.mediums);
+    let targetMedium = getHandleMedium(params.targetHandle, targetNode, susiContext.mediums);
+    if (!mediumsMatch(sourceMedium, targetMedium)) {
       props.args.warning_message = 'The mediums of these handles do not match or are undefined.';
       handleDataReturnToStreamlit(nodes, edges, null);
       return;
@@ -217,7 +219,13 @@ const StreamlitFlowComponent = (props) => {
     var newEdgeId = `st-flow-edge_${params.source}-${params.target}`;
     newEdgeId += '_' + props.args.timestamp;
     const newEdges = addEdge(
-      { ...params, animated: props.args['animateNewEdges'], labelShowBg: false, id: newEdgeId },
+      {
+        ...params,
+        style: { stroke: sourceMedium.color },
+        animated: props.args['animateNewEdges'],
+        labelShowBg: false,
+        id: newEdgeId,
+      },
       edges
     );
     setEdges(newEdges);
