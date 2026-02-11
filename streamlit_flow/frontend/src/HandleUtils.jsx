@@ -1,11 +1,11 @@
 function isHandleTaken(params, sourceNode, targetNode, edges) {
   // edge is valid if its target and source handle are not already taken unless the node is a bus
-  var sourceIsBus = sourceNode.data.component_type == 'Bus';
-  var targetIsBus = targetNode.data.component_type == 'Bus';
+  var sourceIsBus = sourceNode.data.component_type === 'Bus';
+  var targetIsBus = targetNode.data.component_type === 'Bus';
   for (let i = 0; i < edges.length; i++) {
     const edge = edges[i];
-    var sourceHandleTaken = edge.source == params.source && edge.sourceHandle == params.sourceHandle;
-    var targetHandleTaken = edge.target == params.target && edge.targetHandle == params.targetHandle;
+    var sourceHandleTaken = edge.source === params.source && edge.sourceHandle === params.sourceHandle;
+    var targetHandleTaken = edge.target === params.target && edge.targetHandle === params.targetHandle;
     if ((!sourceIsBus && sourceHandleTaken) || (!targetIsBus && targetHandleTaken)) {
       return true;
     }
@@ -19,7 +19,7 @@ function getHandleMedium(handleName, node, mediums) {
 }
 
 function mediumsMatch(m1, m2) {
-  return m1.key != 'UNDEFINED' && m1.key === m2.key;
+  return m1.key !== 'UNDEFINED' && m1.key === m2.key;
 }
 
 function getMediumFromHandleName(handleName, nodeData, mediums) {

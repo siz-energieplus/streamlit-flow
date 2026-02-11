@@ -200,8 +200,8 @@ const StreamlitFlowComponent = (props) => {
   };
 
   const handleConnect = (params) => {
-    let sourceNode = nodes.find((e) => e.id == params.source);
-    let targetNode = nodes.find((e) => e.id == params.target);
+    let sourceNode = nodes.find((e) => e.id === params.source);
+    let targetNode = nodes.find((e) => e.id === params.target);
     // check if its a valid connection
     if (isHandleTaken(params, sourceNode, targetNode, edges)) {
       props.args.warning_message = 'Cannot attach two edges to the same Handle';
@@ -222,6 +222,7 @@ const StreamlitFlowComponent = (props) => {
       {
         ...params,
         style: { stroke: sourceMedium.color },
+        medium_key: sourceMedium.key,
         animated: props.args['animateNewEdges'],
         labelShowBg: false,
         id: newEdgeId,
