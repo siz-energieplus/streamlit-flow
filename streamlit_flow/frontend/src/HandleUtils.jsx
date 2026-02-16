@@ -38,4 +38,24 @@ function getMediumFromHandle(key, handleIndex, nodeData, mediums) {
   return medium;
 }
 
-export { isHandleTaken, getMediumFromHandle, getHandleMedium, mediumsMatch };
+function getEdgeWithMediumMismatch(edges, node, var_name) {
+  // find edge connected to the medium
+  let handleMediumDict = node.data.handle_medium_dict;
+  let edgeIndex = getHandleForVarName('source');
+  if (edgeIndex === -1) edgeIndex = getHandleForVarName('target');
+  if (edgeIndex === -1) return null;
+  return edges[edgeIndex].id;
+
+  function getHandleForVarName(sourceOrTarget) {
+    //get the list of variable names
+    let handleIndex = handleMediumDict[sourceOrTarget].indexOf(var_name);
+    if (handleIndex === -1) return -1;
+    let handleID = sourceOrTarget + '-' + handleIndex;
+    let edgeIndexToDelete = edges.findIndex(
+      (e) => e[sourceOrTarget] === node.id && e[sourceOrTarget + 'Handle'] === handleID
+    );
+    return edgeIndexToDelete;
+  }
+}
+
+export { isHandleTaken, getMediumFromHandle, getHandleMedium, mediumsMatch, getEdgeWithMediumMismatch };
