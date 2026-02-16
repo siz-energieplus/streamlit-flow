@@ -41,11 +41,12 @@ const EditNodeModal = ({
     changeNodeInput(key, 'isIncluded', isIncluded);
   };
   const changeNodeInput = (resieName, inputAttributeName, value) => {
-    var resie_data = editedNode.data.resie_data;
-    var node_input = resie_data.find((obj) => obj.resie_name === resieName);
+    //change node input
+    //if you don't make a copy, the change to the resie_data is applied to the nodes list, since editedNode is a reference, not a copy
+    var resie_data_copy = JSON.parse(JSON.stringify(editedNode.data.resie_data));
+    var node_input = resie_data_copy.find((obj) => obj.resie_name === resieName);
     node_input[inputAttributeName] = value;
-    editedNode.data.resie_data = resie_data;
-    setEditedNode(editedNode);
+    setEditedNode((editedNode) => ({ ...editedNode, data: { ...editedNode.data, resie_data: resie_data_copy } }));
     // remove edge if the medium change necessitates it
     let edgeToDelete = getEdgeWithMediumMismatch(edges, editedNode, resieName);
     setEdgeToDelete(edgeToDelete);
