@@ -2,6 +2,11 @@ import { Row, Col } from 'react-bootstrap';
 import CustomInputField from './CustomInputField';
 
 function RequiredInputMenu({ requiredInputObjects, onEdit }) {
+  /**
+   * Divide up the Node inputs into Lists that are displayed in one row
+   * @param {int} items_per_row how many input fields should there be in each row
+   * @returns {List[List[Node_Input]]}
+   */
   function chunk_into_rows(items_per_row) {
     var rows = [];
     var current_row = [];

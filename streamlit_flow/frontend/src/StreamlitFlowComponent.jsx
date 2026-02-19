@@ -203,7 +203,7 @@ const StreamlitFlowComponent = (props) => {
     let sourceNode = nodes.find((e) => e.id === params.source);
     let targetNode = nodes.find((e) => e.id === params.target);
     // check if its a valid connection
-    if (isHandleTaken(params, sourceNode, targetNode, edges)) {
+    if (isHandleTaken(params.sourceHandle, params.targetHandle, sourceNode, targetNode, edges)) {
       props.args.warning_message = 'Cannot attach two edges to the same Handle';
       handleDataReturnToStreamlit(nodes, edges, null);
       return;

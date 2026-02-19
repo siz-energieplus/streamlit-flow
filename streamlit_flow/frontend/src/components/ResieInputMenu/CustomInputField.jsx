@@ -75,7 +75,6 @@ function CustomInputField({ nodeInput, onEdit }) {
     }
   };
 
-  // console.log(nodeInput.tooltip);
   return (
     <div data-toggle="tooltip" data-placement="top" title={nodeInput.tooltip}>
       {getInputFieldByType()}

@@ -28,6 +28,14 @@ const MemoizedMarkdown = memo(({ content }) => (
   </Markdown>
 ));
 
+/**
+ * create the style object that defines the visuals of this Handle
+ * @param {Position} pos
+ * @param {int} n the number of handles on this side (source/target) of the node
+ * @param {int} i the index of this handle
+ * @param {string} handleColor the color the handle should be
+ * @returns {Object} a style object for the node's handle
+ */
 function styleArgs(pos, n, i, handleColor) {
   let style = {
     background: handleColor,
@@ -49,6 +57,12 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
   const targetPos = targetPosition && (handlePosMap[targetPosition] || Position.Left);
   const mediums = useContext(AppContext).mediums;
 
+  /**
+   * Get the color of the medium associated with this handle
+   * @param {string} key 'source' or 'target' depending on where the handle is
+   * @param {int} handleIndex the index of the handle
+   * @returns {string} the color the handle should be in format: "#ff00cc"
+   */
   function getHandleColor(key, handleIndex) {
     let medium = getMediumFromHandle(key, handleIndex, data, mediums);
     if (!medium) return '#ffffff';
