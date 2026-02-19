@@ -38,24 +38,36 @@ function getMediumFromHandle(key, handleIndex, nodeData, mediums) {
   return medium;
 }
 
-function getEdgeWithMediumMismatch(edges, node, var_name) {
-  // find edge connected to the medium
+function getEdgesWithMediumMismatch(edges, node, var_name) {
+  // find all edges connected to this medium variables
   let handleMediumDict = node.data.handle_medium_dict;
-  let edgeIndex = getHandleForVarName('source');
-  if (edgeIndex === -1) edgeIndex = getHandleForVarName('target');
-  if (edgeIndex === -1) return null;
-  return edges[edgeIndex].id;
+  let sourceEdgesToDelete = getEdgesToDelete('source');
+  let targetEdgesToDelete = getEdgesToDelete('target');
+  // get just the edge IDs
+  let edgeIDs = [];
+  sourceEdgesToDelete.concat(targetEdgesToDelete).forEach((e) => {
+    edgeIDs.push(e.id);
+  });
+  return edgeIDs;
 
-  function getHandleForVarName(sourceOrTarget) {
+  // go through the handles and if they're mapped to our medium variable, return all the edges connected to it
+  // sourceOrTarget is just "source" or "target" since the same process must be done for both sides of the node
+  function getEdgesToDelete(sourceOrTarget) {
+    let listOfEdgesToDelete = [];
     //get the list of variable names
-    let handleIndex = handleMediumDict[sourceOrTarget].indexOf(var_name);
-    if (handleIndex === -1) return -1;
-    let handleID = sourceOrTarget + '-' + handleIndex;
-    let edgeIndexToDelete = edges.findIndex(
-      (e) => e[sourceOrTarget] === node.id && e[sourceOrTarget + 'Handle'] === handleID
-    );
-    return edgeIndexToDelete;
+    let mediumVarNames = handleMediumDict[sourceOrTarget];
+    // multiple edges are possible for the bus node
+    for (let handleIndex = 0; handleIndex < mediumVarNames.length; handleIndex++) {
+      if (mediumVarNames[handleIndex] !== var_name) continue;
+      let handleID = sourceOrTarget + '-' + handleIndex;
+      // find edges that connect to this handle on this node
+      let edgesOnHandle = edges.filter(
+        (e) => e[sourceOrTarget] === node.id && e[sourceOrTarget + 'Handle'] === handleID
+      );
+      listOfEdgesToDelete = listOfEdgesToDelete.concat(edgesOnHandle);
+    }
+    return listOfEdgesToDelete;
   }
 }
 
-export { isHandleTaken, getMediumFromHandle, getHandleMedium, mediumsMatch, getEdgeWithMediumMismatch };
+export { isHandleTaken, getMediumFromHandle, getHandleMedium, mediumsMatch, getEdgesWithMediumMismatch };

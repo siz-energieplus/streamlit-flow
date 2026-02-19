@@ -7,7 +7,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ResieInputMenu from './ResieInputMenu/ResieInputMenu';
-import { getEdgeWithMediumMismatch } from '../HandleUtils';
+import { getEdgesWithMediumMismatch } from '../HandleUtils';
 
 const EditNodeModal = ({
   show,
@@ -23,7 +23,7 @@ const EditNodeModal = ({
   handleDataReturnToStreamlit,
 }) => {
   const [editedNode, setEditedNode] = useState(node);
-  const [edgeToDelete, setEdgeToDelete] = useState(null);
+  const [edgesToDelete, setEdgesToDelete] = useState([]);
 
   const onExited = (e) => {
     setModalClosing(true);
@@ -48,14 +48,14 @@ const EditNodeModal = ({
     node_input[inputAttributeName] = value;
     setEditedNode((editedNode) => ({ ...editedNode, data: { ...editedNode.data, resie_data: resie_data_copy } }));
     // remove edge if the medium change necessitates it
-    let edgeToDelete = getEdgeWithMediumMismatch(edges, editedNode, resieName);
-    setEdgeToDelete(edgeToDelete);
+    let edgesToDelete = getEdgesWithMediumMismatch(edges, editedNode, resieName);
+    setEdgesToDelete(edgesToDelete);
   };
 
   const handleSaveChanges = (e) => {
     const updatedNodes = nodes.map((n) => (n.id === editedNode.id ? editedNode : n));
     setNodes(updatedNodes);
-    const updatedEdges = edges.filter((edge) => edge.id !== edgeToDelete);
+    const updatedEdges = edges.filter((edge) => edgesToDelete.findIndex((e) => e === edge.id) === -1);
     setEdges(updatedEdges);
     handleDataReturnToStreamlit(updatedNodes, updatedEdges, null);
     setNodeContextMenu(null);
