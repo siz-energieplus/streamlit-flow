@@ -46,6 +46,8 @@ table img {
 
 .bus-handle {
   border-radius: 0;
-  transform: rotate(45deg);
-  margin-top: -2px;
+}
+
+path.react-flow__edge-path {
+  stroke-width: 2;
 }
