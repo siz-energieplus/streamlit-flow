@@ -43,3 +43,9 @@ th {
 table img {
     background-color: transparent;
 }
+
+.bus-handle {
+  border-radius: 0;
+  transform: rotate(45deg);
+  margin-top: -2px;
+}

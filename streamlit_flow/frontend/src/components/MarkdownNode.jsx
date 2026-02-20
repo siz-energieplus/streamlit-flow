@@ -40,6 +40,8 @@ function styleArgs(pos, n, i, handleColor) {
   let style = {
     background: handleColor,
     borderColor: '#ffffff',
+    width: '8px',
+    height: '8px',
   };
 
   if (pos === Position.Left || pos === Position.Right) {
@@ -69,6 +71,8 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
     return medium.color;
   }
 
+  let isBus = data.component_type.toLowerCase() === 'bus';
+  let handleType = isBus ? 'bus-handle' : 'custom-handle';
   return (
     <>
       <div className="node-handles">
@@ -77,7 +81,7 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
             <Handle
               id={`source-${i}`}
               key={data.content + '_source-${i}'}
-              className="custom-handle"
+              className={handleType}
               type="source"
               position={sourcePos}
               isConnectable
@@ -96,7 +100,7 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
             <Handle
               id={`target-${i}`}
               key={data.content + '_target-${i}'}
-              className="custom-handle"
+              className={handleType}
               type="target"
               position={targetPos}
               isConnectable
