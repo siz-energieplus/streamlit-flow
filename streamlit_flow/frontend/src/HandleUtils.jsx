@@ -76,8 +76,8 @@ function getMedium(handleName, nodeData, mediums) {
 function getEdgesWithMediumMismatch(edges, node, mediumVarName) {
   // find all edges connected to this medium variables
   let handleMediumDict = node.data.handle_medium_dict;
-  let sourceEdgesToDelete = getEdgesToDelete('source');
-  let targetEdgesToDelete = getEdgesToDelete('target');
+  let sourceEdgesToDelete = getEdgesToDelete(edges, node.id, mediumVarName, 'source');
+  let targetEdgesToDelete = getEdgesToDelete(edges, node.id, mediumVarName, 'target');
   // get just the edge IDs
   let edgeIDs = [];
   sourceEdgesToDelete.concat(targetEdgesToDelete).forEach((e) => {
@@ -90,17 +90,17 @@ function getEdgesWithMediumMismatch(edges, node, mediumVarName) {
    * @param {string} sourceOrTarget 'source' or 'target'
    * @returns {List{Object}} a list of the edge objects connected to a handle whose medium was changed
    */
-  function getEdgesToDelete(sourceOrTarget) {
+  function getEdgesToDelete(_edges, _nodeID, _mediumVarName, _sourceOrTarget) {
     let listOfEdgesToDelete = [];
     //get the list of variable names
     let mediumVarNames = handleMediumDict[sourceOrTarget];
     // multiple edges are possible for the bus node
     for (let handleIndex = 0; handleIndex < mediumVarNames.length; handleIndex++) {
-      if (mediumVarNames[handleIndex] !== mediumVarName) continue;
+      if (mediumVarNames[handleIndex] !== _mediumVarName) continue;
       let handleID = sourceOrTarget + '-' + handleIndex;
       // find edges that connect to this handle on this node
-      let edgesOnHandle = edges.filter(
-        (e) => e[sourceOrTarget] === node.id && e[sourceOrTarget + 'Handle'] === handleID
+      let edgesOnHandle = _edges.filter(
+        (e) => e[sourceOrTarget] === _nodeID && e[sourceOrTarget + 'Handle'] === handleID
       );
       listOfEdgesToDelete = listOfEdgesToDelete.concat(edgesOnHandle);
     }
