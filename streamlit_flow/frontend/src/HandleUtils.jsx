@@ -26,53 +26,54 @@ function isHandleTaken(sourceHandle, targetHandle, sourceNode, targetNode, edges
 
 /**
  * Check if two mediums are defined and the same
- * @param {Object} m1 a medium to check
- * @param {Object} m2 a medium to check
+ * @param {key} m1 the key of the medium to check
+ * @param {key} m2 the key of the medium to check
  * @returns {bool} whether the mediums are defined and the same
  */
 function mediumsMatch(m1, m2) {
-  return m1.key !== 'UNDEFINED' && m1.key === m2.key;
+  return m1 !== 'UNDEFINED' && m1 === m2;
 }
 
 /**
- * Get the medium associated with a specific handle on a node
- * @param {string} handleName
- * @param {Object} node
- * @param {List[Object]} mediums
- * @returns {Object} the medium associated with this handle {key: x, name: y, color: z}
+ * Get the key of the medium associated with a specific handle on a node
+ * @param {string} handleName the name of the handle
+ * @param {Object} nodeData node.data for our node
+ * @returns {Object} the key of the medium associated with this handle
  */
-function getHandleMedium(handleName, node, mediums) {
+function getMediumKey(handleName, nodeData) {
   let splitName = handleName.split('-');
-  return getMediumFromHandle(splitName[0], parseInt(splitName[1]), node.data, mediums);
-}
-
-/**
- * Get the medium from the already handle info and node data
- * @param {string} key 'source' or 'target' depending on where the handle is
- * @param {int} handleIndex
- * @param {Object} nodeData
- * @param {List[Object]} mediums
- * @returns {Object} the medium associated with this handle {key: x, name: y, color: z}
- */
-function getMediumFromHandle(key, handleIndex, nodeData, mediums) {
+  let sourceOrTarget = splitName[0];
+  let handleIndex = splitName[1];
   // get the variable name for the medium that sets this handle's color
-  let mediumPerHandle = nodeData.handle_medium_dict[key];
+  let mediumPerHandle = nodeData.handle_medium_dict[sourceOrTarget];
   let variableName = mediumPerHandle[handleIndex];
   // find the medium that is set in this variable
   let mediumNodeInput = nodeData.resie_data.find((x) => x.resie_name === variableName);
-  //find the medium object (from global context) with this name
-  let medium = mediums.find((x) => x.key === mediumNodeInput.value);
+  return mediumNodeInput.value;
+}
+
+/**
+ * Get the medium for the handle on a node
+ * @param {string} handleName the name of the handle e.g. target-1 or source-2
+ * @param {Object} nodeData node.data of some node, so we can get its resie_data
+ * @param {List[Object]} mediums A list of the mediums
+ * @returns {Object} the medium Objects with {key, name, color}
+ */
+function getMedium(handleName, nodeData, mediums) {
+  let key = getMediumKey(handleName, nodeData);
+  let medium = mediums.find((x) => x.key === key);
   return medium;
 }
 
 /**
  * find all edges, whose medium is controlled by the variable with name var_name on the given node
+ * @param {List[Object]} nodes the list of all existing nodes, so we can check if an edge has a medium mismatch
  * @param {List[Object]} edges a list of all existing edges
  * @param {Object} node the node, whose medium was changed
- * @param {string} var_name the name of the medium variable that was changed
+ * @param {string} mediumVarName the name of the medium variable that was changed
  * @returns {List[string]} a list of all the edge IDs that need to be deleted as a result of the medium change
  */
-function getEdgesWithMediumMismatch(edges, node, var_name) {
+function getEdgesWithMediumMismatch(edges, node, mediumVarName) {
   // find all edges connected to this medium variables
   let handleMediumDict = node.data.handle_medium_dict;
   let sourceEdgesToDelete = getEdgesToDelete('source');
@@ -95,7 +96,7 @@ function getEdgesWithMediumMismatch(edges, node, var_name) {
     let mediumVarNames = handleMediumDict[sourceOrTarget];
     // multiple edges are possible for the bus node
     for (let handleIndex = 0; handleIndex < mediumVarNames.length; handleIndex++) {
-      if (mediumVarNames[handleIndex] !== var_name) continue;
+      if (mediumVarNames[handleIndex] !== mediumVarName) continue;
       let handleID = sourceOrTarget + '-' + handleIndex;
       // find edges that connect to this handle on this node
       let edgesOnHandle = edges.filter(
@@ -107,4 +108,4 @@ function getEdgesWithMediumMismatch(edges, node, var_name) {
   }
 }
 
-export { isHandleTaken, getMediumFromHandle, getHandleMedium, mediumsMatch, getEdgesWithMediumMismatch };
+export { isHandleTaken, getMedium, getMediumKey, mediumsMatch, getEdgesWithMediumMismatch };

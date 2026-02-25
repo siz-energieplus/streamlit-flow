@@ -10,7 +10,7 @@ import 'katex/dist/katex.min.css';
 import 'highlight.js/styles/github.css';
 
 import { AppContext } from './AppContext';
-import { getMediumFromHandle } from '../HandleUtils';
+import { getMedium } from '../HandleUtils';
 
 const handlePosMap = {
   top: Position.Top,
@@ -61,12 +61,11 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
 
   /**
    * Get the color of the medium associated with this handle
-   * @param {string} key 'source' or 'target' depending on where the handle is
-   * @param {int} handleIndex the index of the handle
+   * @param {string} the handle's name like target-0 or source-2
    * @returns {string} the color the handle should be in format: "#ff00cc"
    */
-  function getHandleColor(key, handleIndex) {
-    let medium = getMediumFromHandle(key, handleIndex, data, mediums);
+  function getHandleColor(handleName) {
+    let medium = getMedium(handleName, data, mediums);
     if (!medium) return '#ffffff';
     return medium.color;
   }
@@ -80,12 +79,12 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
           [...Array(sourceHandles)].map((_, i) => (
             <Handle
               id={`source-${i}`}
-              key={data.content + '_source-${i}'}
+              key={data.content + '_source-'+i}
               className={handleType}
               type="source"
               position={sourcePos}
               isConnectable
-              style={styleArgs(sourcePos, sourceHandles, i, getHandleColor('source', i))}
+              style={styleArgs(sourcePos, sourceHandles, i, getHandleColor('source-'+ i))}
             />
           ))}
       </div>
@@ -99,12 +98,12 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
           [...Array(targetHandles)].map((_, i) => (
             <Handle
               id={`target-${i}`}
-              key={data.content + '_target-${i}'}
+              key={data.content + '_target-'+i}
               className={handleType}
               type="target"
               position={targetPos}
               isConnectable
-              style={styleArgs(targetPos, targetHandles, i, getHandleColor('target', i))}
+              style={styleArgs(targetPos, targetHandles, i, getHandleColor('target-'+ i))}
             />
           ))}
       </div>

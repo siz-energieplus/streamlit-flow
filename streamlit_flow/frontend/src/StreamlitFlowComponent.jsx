@@ -24,7 +24,7 @@ import { MarkdownInputNode, MarkdownOutputNode, MarkdownDefaultNode } from './co
 import PaneConextMenu from './components/PaneContextMenu';
 import NodeContextMenu from './components/NodeContextMenu';
 import EdgeContextMenu from './components/EdgeContextMenu';
-import { isHandleTaken, getHandleMedium, mediumsMatch } from './HandleUtils';
+import { isHandleTaken, mediumsMatch, getMediumKey, getMedium } from './HandleUtils';
 
 import createElkGraphLayout from './layouts/ElkLayout';
 
@@ -208,9 +208,10 @@ const StreamlitFlowComponent = (props) => {
       handleDataReturnToStreamlit(nodes, edges, null);
       return;
     }
-    let sourceMedium = getHandleMedium(params.sourceHandle, sourceNode, susiContext.mediums);
-    let targetMedium = getHandleMedium(params.targetHandle, targetNode, susiContext.mediums);
-    if (!mediumsMatch(sourceMedium, targetMedium)) {
+    let sourceMedium = getMedium(params.sourceHandle, sourceNode.data, susiContext.mediums)
+    let sourceMediumKey = sourceMedium.key;
+    let targetMediumKey = getMediumKey(params.targetHandle, targetNode.data);
+    if (!mediumsMatch(sourceMediumKey, targetMediumKey)) {
       props.args.warning_message = 'The mediums of these handles do not match or are undefined.';
       handleDataReturnToStreamlit(nodes, edges, null);
       return;
@@ -222,7 +223,7 @@ const StreamlitFlowComponent = (props) => {
       {
         ...params,
         style: { stroke: sourceMedium.color },
-        medium_key: sourceMedium.key,
+        medium_key: sourceMediumKey,
         animated: props.args['animateNewEdges'],
         labelShowBg: false,
         id: newEdgeId,
