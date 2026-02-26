@@ -26,8 +26,8 @@ function isHandleTaken(sourceHandle, targetHandle, sourceNode, targetNode, edges
 
 /**
  * Check if two mediums are defined and the same
- * @param {key} m1 the key of the medium to check
- * @param {key} m2 the key of the medium to check
+ * @param {string} m1 the key of the medium to check
+ * @param {string} m2 the key of the medium to check
  * @returns {bool} whether the mediums are defined and the same
  */
 function mediumsMatch(m1, m2) {
@@ -67,7 +67,6 @@ function getMedium(handleName, nodeData, mediums) {
 
 /**
  * find all edges, whose medium is controlled by the variable with name var_name on the given node
- * @param {List[Object]} nodes the list of all existing nodes, so we can check if an edge has a medium mismatch
  * @param {List[Object]} edges a list of all existing edges
  * @param {Object} node the node, whose medium was changed
  * @param {string} mediumVarName the name of the medium variable that was changed
@@ -86,21 +85,24 @@ function getEdgesWithMediumMismatch(edges, node, mediumVarName) {
   return edgeIDs;
 
   /**
-   * For either the source or target handles, return all edges attached to handles, whose medium was changed
-   * @param {string} sourceOrTarget 'source' or 'target'
-   * @returns {List{Object}} a list of the edge objects connected to a handle whose medium was changed
+   * Get a List of all edge objects that are on the handle controlled by this medium variable
+   * @param {List[Object]} _edges a list of all the edges in the scene
+   * @param {string} _nodeID the id of the node that's being edited
+   * @param {string} _mediumVarName the name of the medium variable, whose value was just changed
+   * @param {string} _sourceOrTarget 'source' or 'target'
+   * @returns {List[Object]} List of all edge objects that are on the handle controlled by this medium variable
    */
   function getEdgesToDelete(_edges, _nodeID, _mediumVarName, _sourceOrTarget) {
     let listOfEdgesToDelete = [];
     //get the list of variable names
-    let mediumVarNames = handleMediumDict[sourceOrTarget];
+    let mediumVarNames = handleMediumDict[_sourceOrTarget];
     // multiple edges are possible for the bus node
     for (let handleIndex = 0; handleIndex < mediumVarNames.length; handleIndex++) {
       if (mediumVarNames[handleIndex] !== _mediumVarName) continue;
-      let handleID = sourceOrTarget + '-' + handleIndex;
+      let handleID = _sourceOrTarget + '-' + handleIndex;
       // find edges that connect to this handle on this node
       let edgesOnHandle = _edges.filter(
-        (e) => e[sourceOrTarget] === _nodeID && e[sourceOrTarget + 'Handle'] === handleID
+        (e) => e[_sourceOrTarget] === _nodeID && e[_sourceOrTarget + 'Handle'] === handleID
       );
       listOfEdgesToDelete = listOfEdgesToDelete.concat(edgesOnHandle);
     }

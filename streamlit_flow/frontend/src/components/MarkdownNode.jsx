@@ -36,7 +36,7 @@ const MemoizedMarkdown = memo(({ content }) => (
  * @param {string} handleColor the color the handle should be
  * @returns {Object} a style object for the node's handle
  */
-function styleArgs(pos, n, i, handleColor) {
+function getHandleStyle(pos, n, i, handleColor) {
   let style = {
     background: handleColor,
     borderColor: '#ffffff',
@@ -61,8 +61,8 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
 
   /**
    * Get the color of the medium associated with this handle
-   * @param {string} the handle's name like target-0 or source-2
-   * @returns {string} the color the handle should be in format: "#ff00cc"
+   * @param {string} handleName the handle's name like target-0 or source-2
+   * @returns {string} the color the handle should be (in format: "#ff00cc")
    */
   function getHandleColor(handleName) {
     let medium = getMedium(handleName, data, mediums);
@@ -79,12 +79,12 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
           [...Array(sourceHandles)].map((_, i) => (
             <Handle
               id={`source-${i}`}
-              key={data.content + '_source-'+i}
+              key={data.content + '_source-' + i}
               className={handleType}
               type="source"
               position={sourcePos}
               isConnectable
-              style={styleArgs(sourcePos, sourceHandles, i, getHandleColor('source-'+ i))}
+              style={getHandleStyle(sourcePos, sourceHandles, i, getHandleColor('source-' + i))}
             />
           ))}
       </div>
@@ -98,12 +98,12 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
           [...Array(targetHandles)].map((_, i) => (
             <Handle
               id={`target-${i}`}
-              key={data.content + '_target-'+i}
+              key={data.content + '_target-' + i}
               className={handleType}
               type="target"
               position={targetPos}
               isConnectable
-              style={styleArgs(targetPos, targetHandles, i, getHandleColor('target-'+ i))}
+              style={getHandleStyle(targetPos, targetHandles, i, getHandleColor('target-' + i))}
             />
           ))}
       </div>
