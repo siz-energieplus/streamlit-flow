@@ -43,7 +43,8 @@ def streamlit_flow(key:str,
                     enable_node_menu:bool=False,
                     enable_edge_menu:bool=False,
                     hide_watermark:bool=False,
-                    default_edge_options:dict={}):
+                    default_edge_options:dict={},
+                    additional_data:dict={}):
     
     """
     The main function to render the flowchart component in Streamlit.
@@ -95,6 +96,7 @@ def streamlit_flow(key:str,
                                         enableEdgeMenu=enable_edge_menu,
                                         hideWatermark=hide_watermark,
                                         defaultEdgeOptions=default_edge_options,
+                                        additionalData=additional_data,
                                         key=key,
                                         timestamp=state.timestamp,
                                         component='streamlit_flow')

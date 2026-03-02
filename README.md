@@ -95,6 +95,11 @@ streamlit run example.py
 * Ensure all edge IDs are unique and that edges cannot connect to handles that already have an edge attached to them
 * Let Streamlit Flow send warning messages to the frontend to display
 * Node Context Menu includes input fields for Resie Node Parameters
+* Addition of AppContext, which contains a list of mediums
+    * Only edge connections for handles with matching mediums are allowed
+    * The Dropdown menu checks if an input is a medium, so its options can be the list of mediums
+    * EditNodeModal can delete edges, if a change in medium makes those edges invalid 
+    * Handles and Edges take color of their associated medium
 
 ## Change log
 

@@ -43,3 +43,11 @@ th {
 table img {
     background-color: transparent;
 }
+
+.bus-handle {
+  border-radius: 0;
+}
+
+path.react-flow__edge-path {
+  stroke-width: 2;
+}

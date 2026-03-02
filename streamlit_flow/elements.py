@@ -207,6 +207,7 @@ class StreamlitFlowEdge:
                     style:Dict[str, any]={},
                     sourceHandle:str="unknown",
                     targetHandle:str="unknown",
+                    medium_key: str = "UNDEFINED",
                     **kwargs) -> None:
 
         self.id = id
@@ -229,6 +230,7 @@ class StreamlitFlowEdge:
         self.kwargs = kwargs
         self.sourceHandle = sourceHandle
         self.targetHandle = targetHandle
+        self.medium_key = medium_key
 
         self.__validate__()
 
@@ -254,7 +256,8 @@ class StreamlitFlowEdge:
                     label_bg_style=edge_dict.get('labelBgStyle', {}),
                     style=edge_dict.get('style', {}),
                     sourceHandle=edge_dict.get('sourceHandle',"unknown"),
-                    targetHandle=edge_dict.get('targetHandle',"unknown"))
+                    targetHandle=edge_dict.get('targetHandle',"unknown"),
+                    medium_key=edge_dict.get('medium_key', "UNDEFINED"))
 
 
     def __validate__(self) -> None:
@@ -281,7 +284,8 @@ class StreamlitFlowEdge:
             "labelBgStyle": self.label_bg_style,
             "style": self.style,
             "sourceHandle": self.sourceHandle,
-            "targetHandle": self.targetHandle
+            "targetHandle": self.targetHandle,
+            "medium_key": self.medium_key,
         }
 
         edge_dict.update(self.kwargs)

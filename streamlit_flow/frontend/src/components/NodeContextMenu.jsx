@@ -7,6 +7,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ResieInputMenu from './ResieInputMenu/ResieInputMenu';
+import { getEdgesWithMediumMismatch } from '../HandleUtils';
 
 const EditNodeModal = ({
   show,
@@ -16,11 +17,13 @@ const EditNodeModal = ({
   setNodeContextMenu,
   setModalClosing,
   setNodes,
+  setEdges,
   nodes,
   edges,
   handleDataReturnToStreamlit,
 }) => {
   const [editedNode, setEditedNode] = useState(node);
+  const [edgesToDelete, setEdgesToDelete] = useState([]);
 
   const onExited = (e) => {
     setModalClosing(true);
@@ -38,17 +41,23 @@ const EditNodeModal = ({
     changeNodeInput(key, 'isIncluded', isIncluded);
   };
   const changeNodeInput = (resieName, inputAttributeName, value) => {
-    var resie_data = editedNode.data.resie_data;
-    var node_input = resie_data.find((obj) => obj.resie_name === resieName);
+    //change node input
+    //if you don't make a copy, the change to the resie_data is applied to the nodes list, since editedNode is a reference, not a copy
+    var resie_data_copy = JSON.parse(JSON.stringify(editedNode.data.resie_data));
+    var node_input = resie_data_copy.find((obj) => obj.resie_name === resieName);
     node_input[inputAttributeName] = value;
-    editedNode.data.resie_data = resie_data;
-    setEditedNode(editedNode);
+    setEditedNode((editedNode) => ({ ...editedNode, data: { ...editedNode.data, resie_data: resie_data_copy } }));
+    // remove edge if the medium change necessitates it
+    let edgesToDelete = getEdgesWithMediumMismatch(edges, editedNode, resieName);
+    setEdgesToDelete(edgesToDelete);
   };
 
   const handleSaveChanges = (e) => {
     const updatedNodes = nodes.map((n) => (n.id === editedNode.id ? editedNode : n));
     setNodes(updatedNodes);
-    handleDataReturnToStreamlit(updatedNodes, edges, null);
+    const updatedEdges = edges.filter((edge) => edgesToDelete.findIndex((e) => e === edge.id) === -1);
+    setEdges(updatedEdges);
+    handleDataReturnToStreamlit(updatedNodes, updatedEdges, null);
     setNodeContextMenu(null);
   };
 
@@ -167,6 +176,7 @@ const NodeContextMenu = ({
         setNodeContextMenu={setNodeContextMenu}
         setModalClosing={setModalClosing}
         setNodes={setNodes}
+        setEdges={setEdges}
         handleDataReturnToStreamlit={handleDataReturnToStreamlit}
       />
     </>

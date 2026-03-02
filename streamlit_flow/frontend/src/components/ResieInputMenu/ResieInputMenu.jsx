@@ -1,5 +1,4 @@
 import Modal from 'react-bootstrap/Modal';
-import CustomInputField from './CustomInputField';
 import RequiredInputMenu from './RequiredInputMenu';
 import OptionalInputMenu from './OptionalInputMenu';
 

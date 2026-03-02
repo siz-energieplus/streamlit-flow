@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useContext } from 'react';
 import { Handle, Position } from 'reactflow';
 import Markdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
@@ -8,6 +8,9 @@ import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
 import 'katex/dist/katex.min.css';
 import 'highlight.js/styles/github.css';
+
+import { AppContext } from './AppContext';
+import { getMedium } from '../HandleUtils';
 
 const handlePosMap = {
   top: Position.Top,
@@ -25,12 +28,28 @@ const MemoizedMarkdown = memo(({ content }) => (
   </Markdown>
 ));
 
-function styleArgs(pos, n, i) {
+/**
+ * create the style object that defines the visuals of this Handle
+ * @param {Position} pos
+ * @param {int} n the number of handles on this side (source/target) of the node
+ * @param {int} i the index of this handle
+ * @param {string} handleColor the color the handle should be
+ * @returns {Object} a style object for the node's handle
+ */
+function getHandleStyle(pos, n, i, handleColor) {
+  let style = {
+    background: handleColor,
+    borderColor: '#ffffff',
+    width: '8px',
+    height: '8px',
+  };
+
   if (pos === Position.Left || pos === Position.Right) {
-    return { top: `${(i + 1) * (100.0 / (n + 1))}%` };
+    style.top = `${(i + 1) * (100.0 / (n + 1))}%`;
   } else {
-    return { left: `${(i + 1) * (100.0 / (n + 1))}%` };
+    style.left = `${(i + 1) * (100.0 / (n + 1))}%`;
   }
+  return style;
 }
 
 function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
@@ -38,7 +57,21 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
   const targetHandles = data.targetHandles !== undefined ? data.targetHandles : 0;
   const sourcePos = sourcePosition && (handlePosMap[sourcePosition] || Position.Right);
   const targetPos = targetPosition && (handlePosMap[targetPosition] || Position.Left);
+  const mediums = useContext(AppContext).mediums;
 
+  /**
+   * Get the color of the medium associated with this handle
+   * @param {string} handleName the handle's name like target-0 or source-2
+   * @returns {string} the color the handle should be (in format: "#ff00cc")
+   */
+  function getHandleColor(handleName) {
+    let medium = getMedium(handleName, data, mediums);
+    if (!medium) return '#ffffff';
+    return medium.color;
+  }
+
+  let isBus = data.component_type.toLowerCase() === 'bus';
+  let handleType = isBus ? 'bus-handle' : 'custom-handle';
   return (
     <>
       <div className="node-handles">
@@ -46,12 +79,12 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
           [...Array(sourceHandles)].map((_, i) => (
             <Handle
               id={`source-${i}`}
-              key={data.content + '_source-${i}'}
-              className="custom-handle"
+              key={data.content + '_source-' + i}
+              className={handleType}
               type="source"
               position={sourcePos}
               isConnectable
-              style={styleArgs(sourcePos, sourceHandles, i)}
+              style={getHandleStyle(sourcePos, sourceHandles, i, getHandleColor('source-' + i))}
             />
           ))}
       </div>
@@ -65,12 +98,12 @@ function MarkdownNode(data, sourcePosition = false, targetPosition = false) {
           [...Array(targetHandles)].map((_, i) => (
             <Handle
               id={`target-${i}`}
-              key={data.content + '_target-${i}'}
-              className="custom-handle"
+              key={data.content + '_target-' + i}
+              className={handleType}
               type="target"
               position={targetPos}
               isConnectable
-              style={styleArgs(targetPos, targetHandles, i)}
+              style={getHandleStyle(targetPos, targetHandles, i, getHandleColor('target-' + i))}
             />
           ))}
       </div>
