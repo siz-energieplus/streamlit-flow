@@ -24,7 +24,7 @@ import { MarkdownInputNode, MarkdownOutputNode, MarkdownDefaultNode } from './co
 import PaneConextMenu from './components/PaneContextMenu';
 import NodeContextMenu from './components/NodeContextMenu';
 import EdgeContextMenu from './components/EdgeContextMenu';
-import { isHandleTaken, mediumsMatch, getMediumKey, getMedium } from './HandleUtils';
+import { isHandleTaken, mediumsMatch, getMediumKey, getMedium, updateBusData } from './HandleUtils';
 
 import createElkGraphLayout from './layouts/ElkLayout';
 
@@ -208,7 +208,7 @@ const StreamlitFlowComponent = (props) => {
       handleDataReturnToStreamlit(nodes, edges, null);
       return;
     }
-    let sourceMedium = getMedium(params.sourceHandle, sourceNode.data, susiContext.mediums)
+    let sourceMedium = getMedium(params.sourceHandle, sourceNode.data, susiContext.mediums);
     let sourceMediumKey = sourceMedium.key;
     let targetMediumKey = getMediumKey(params.targetHandle, targetNode.data);
     if (!mediumsMatch(sourceMediumKey, targetMediumKey)) {
@@ -216,6 +216,9 @@ const StreamlitFlowComponent = (props) => {
       handleDataReturnToStreamlit(nodes, edges, null);
       return;
     }
+    // update bus data with this new connection if the nodes are buses
+    updateBusData(sourceNode, targetNode.id, false);
+    updateBusData(targetNode, sourceNode.id, true);
     // add new edge
     var newEdgeId = `st-flow-edge_${params.source}-${params.target}`;
     newEdgeId += '_' + props.args.timestamp;
