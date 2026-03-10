@@ -24,7 +24,8 @@ import { MarkdownInputNode, MarkdownOutputNode, MarkdownDefaultNode } from './co
 import PaneConextMenu from './components/PaneContextMenu';
 import NodeContextMenu from './components/NodeContextMenu';
 import EdgeContextMenu from './components/EdgeContextMenu';
-import { isHandleTaken, mediumsMatch, getMediumKey, getMedium, updateBusData } from './HandleUtils';
+import { isHandleTaken, mediumsMatch, getMediumKey, getMedium } from './HandleUtils';
+import { updateBusDataOnEdgeConnect } from './BusDataUtils';
 
 import createElkGraphLayout from './layouts/ElkLayout';
 
@@ -217,8 +218,8 @@ const StreamlitFlowComponent = (props) => {
       return;
     }
     // update bus data with this new connection if the nodes are buses
-    updateBusData(sourceNode, targetNode.id, false);
-    updateBusData(targetNode, sourceNode.id, true);
+    updateBusDataOnEdgeConnect(sourceNode, targetNode.id, false);
+    updateBusDataOnEdgeConnect(targetNode, sourceNode.id, true);
     // add new edge
     var newEdgeId = `st-flow-edge_${params.source}-${params.target}`;
     newEdgeId += '_' + props.args.timestamp;

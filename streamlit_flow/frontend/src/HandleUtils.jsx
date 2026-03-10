@@ -25,32 +25,6 @@ function isHandleTaken(sourceHandle, targetHandle, sourceNode, targetNode, edges
 }
 
 /**
- * Update input_order, output_order and energy_flow in node.data.bus_data with this new connection
- * This code is a duplicate of a python function in create_elements.py
- * @param {Object} node The bus, whose data we're updating
- * @param {string} connectedNodeID the id of the node being connected to this bus
- * @param {boolean} incoming is this an incoming (or outgoing) connection
- * @returns
- */
-function updateBusData(node, connectedNodeID, incoming) {
-  if (node.data.component_type.toLowerCase() !== 'bus') return;
-  let busData = node.data.bus_data;
-  busData[incoming ? 'input_order' : 'output_order'].push(connectedNodeID);
-  // update energy flow and fill with 1s by default
-  // inputs are rows, outputs are columns
-  let energyFlow = busData.energy_flow;
-  if (incoming) {
-    let newRow = busData.output_order.map(() => 1);
-    energyFlow.push(newRow);
-  } else {
-    energyFlow.forEach((row) => {
-      row.push(1);
-    });
-  }
-  busData.energy_flow = energyFlow;
-}
-
-/**
  * Check if two mediums are defined and the same
  * @param {string} m1 the key of the medium to check
  * @param {string} m2 the key of the medium to check
@@ -136,4 +110,4 @@ function getEdgesWithMediumMismatch(edges, node, mediumVarName) {
   }
 }
 
-export { isHandleTaken, getMedium, getMediumKey, mediumsMatch, getEdgesWithMediumMismatch, updateBusData };
+export { isHandleTaken, getMedium, getMediumKey, mediumsMatch, getEdgesWithMediumMismatch };
