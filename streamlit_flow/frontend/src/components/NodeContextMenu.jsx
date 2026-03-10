@@ -137,6 +137,31 @@ const NodeContextMenu = ({
     setNodeContextMenu(null);
   };
 
+  /**
+   * Duplicate the selected node. Move the duplicated node towards the bottom right.
+   * Give the duplicated node a unique ID and name.
+   */
+  const handleDuplicateNode = (e) => {
+    const nodeToDuplicate = nodes.find((node) => node.id === nodeContextMenu.node.id);
+    const duplicateNode = JSON.parse(JSON.stringify(nodeToDuplicate));
+    // move node towards bottom right and give it a unique ID
+    duplicateNode.position.x += 20;
+    duplicateNode.position.y += 20;
+    duplicateNode.id = nodeToDuplicate.id + '_' + new Date().getTime();
+    // find node name that is not taken
+    let duplicateNodeName = nodeToDuplicate.data.content + '_COPY_';
+    let nameSuffix = 0;
+    while (nodes.findIndex((node) => node.data.content === duplicateNodeName + nameSuffix) !== -1) {
+      nameSuffix++;
+    }
+    duplicateNode.data.content = duplicateNodeName + nameSuffix;
+    // update list of nodes
+    let updatedNodes = [...nodes, duplicateNode];
+    setNodes(updatedNodes);
+    handleDataReturnToStreamlit(updatedNodes, edges, null);
+    setNodeContextMenu(null);
+  };
+
   return (
     <>
       <div
@@ -162,6 +187,9 @@ const NodeContextMenu = ({
               disabled={!nodeContextMenu.node.deletable}
             >
               <i className="bi bi-trash3"></i> Delete Node
+            </Button>
+            <Button variant="outline-primary" onClick={handleDuplicateNode}>
+              <i class="bi bi-copy"></i> Duplicate Node
             </Button>
           </ButtonGroup>
         )}
