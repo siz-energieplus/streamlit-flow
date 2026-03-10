@@ -1,18 +1,24 @@
 import { Row, Col, Form } from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
 import CustomInputField from './CustomInputField';
 import { useState } from 'react';
 
 function OptionalInputMenu({ optionalInputObjects, onValueChange, onIncludedChange }) {
+  if (optionalInputObjects.length === 0) return <></>;
+
   return (
     <>
-      {optionalInputObjects.map((nodeInput) => (
-        <OptionalInputField
-          nodeInput={nodeInput}
-          onValueChange={onValueChange}
-          startIncluded={nodeInput.isIncluded}
-          onIncludedChange={onIncludedChange}
-        />
-      ))}
+      <Modal.Body>
+        <Modal.Header>Optional Inputs</Modal.Header>
+        {optionalInputObjects.map((nodeInput) => (
+          <OptionalInputField
+            nodeInput={nodeInput}
+            onValueChange={onValueChange}
+            startIncluded={nodeInput.isIncluded}
+            onIncludedChange={onIncludedChange}
+          />
+        ))}
+      </Modal.Body>
     </>
   );
 }

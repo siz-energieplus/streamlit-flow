@@ -1,4 +1,3 @@
-import Modal from 'react-bootstrap/Modal';
 import RequiredInputMenu from './RequiredInputMenu';
 import OptionalInputMenu from './OptionalInputMenu';
 
@@ -8,18 +7,12 @@ function ResieInputMenu({ nodeInputObjects, onValueChange, onIncludedChange }) {
 
   return (
     <>
-      <Modal.Body>
-        <Modal.Header>Required Inputs</Modal.Header>
-        <RequiredInputMenu requiredInputObjects={requiredInputs} onEdit={onValueChange} />
-      </Modal.Body>
-      <Modal.Body>
-        <Modal.Header>Optional Inputs</Modal.Header>
-        <OptionalInputMenu
-          optionalInputObjects={optionalInputs}
-          onValueChange={onValueChange}
-          onIncludedChange={onIncludedChange}
-        />
-      </Modal.Body>
+      <RequiredInputMenu requiredInputObjects={requiredInputs} onEdit={onValueChange} />
+      <OptionalInputMenu
+        optionalInputObjects={optionalInputs}
+        onValueChange={onValueChange}
+        onIncludedChange={onIncludedChange}
+      />
     </>
   );
 }
