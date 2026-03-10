@@ -42,5 +42,12 @@ function updateBusDataOnEdgeDelete(node, disconnectedNodeID, incoming) {
     });
   }
 }
+function getEmptyBusdata() {
+  return {
+    energy_flow: [],
+    input_order: [],
+    output_order: [],
+  };
+}
 
-export { updateBusDataOnEdgeConnect, updateBusDataOnEdgeDelete };
+export { updateBusDataOnEdgeConnect, updateBusDataOnEdgeDelete, getEmptyBusdata };

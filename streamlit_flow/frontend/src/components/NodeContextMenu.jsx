@@ -8,6 +8,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ResieInputMenu from './ResieInputMenu/ResieInputMenu';
 import { getEdgesWithMediumMismatch } from '../HandleUtils';
+import { getEmptyBusdata } from '../BusDataUtils';
 
 const EditNodeModal = ({
   show,
@@ -148,6 +149,8 @@ const NodeContextMenu = ({
     duplicateNode.position.x += 20;
     duplicateNode.position.y += 20;
     duplicateNode.id = nodeToDuplicate.id + '_' + new Date().getTime();
+    let isBus = duplicateNode.data.component_type.toLowerCase() === 'bus';
+    duplicateNode.data.bus_data = isBus ? getEmptyBusdata() : null;
     // find node name that is not taken
     let duplicateNodeName = nodeToDuplicate.data.content + '_COPY_';
     let nameSuffix = 0;
