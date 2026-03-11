@@ -7,7 +7,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-import { updateBusDataOnEdgeDelete } from '../BusDataUtils';
+import { removeBusConnection } from '../BusDataUtils';
 
 const EditEdgeModal = ({
   show,
@@ -156,9 +156,9 @@ const EdgeContextMenu = ({
       nodes.forEach((node) => {
         let edge = edgeContextMenu.edge;
         if (edge.source === node.id) {
-          updateBusDataOnEdgeDelete(node, edge.target, false);
+          removeBusConnection(node, edge.target, false);
         } else if (edge.target === node.id) {
-          updateBusDataOnEdgeDelete(node, edge.source, true);
+          removeBusConnection(node, edge.source, true);
         }
       });
       // delete edge

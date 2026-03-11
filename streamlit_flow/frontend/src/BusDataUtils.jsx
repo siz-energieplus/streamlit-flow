@@ -24,7 +24,13 @@ function updateBusDataOnEdgeConnect(node, connectedNodeID, incoming) {
   busData.energy_flow = energyFlow;
 }
 
-function updateBusDataOnEdgeDelete(node, disconnectedNodeID, incoming) {
+/**
+ * Removes a node from a bus's input/output_order and energy_flow
+ * @param {Object} node the node whose bus_data we're updating
+ * @param {string} disconnectedNodeID the id of the node we're disconnecting from the bus
+ * @param {boolean} incoming Is this an incoming connection i.e. is the bus the target
+ */
+function removeBusConnection(node, disconnectedNodeID, incoming) {
   if (node.data.component_type.toLowerCase() !== 'bus') return;
   let busData = node.data.bus_data;
   if (incoming) {
@@ -42,6 +48,28 @@ function updateBusDataOnEdgeDelete(node, disconnectedNodeID, incoming) {
     });
   }
 }
+
+/**
+ * Find all the edges that are deleted when this node is deleted.
+ * Then update the bus_data to remove those connections.
+ * @param {string} deletedNodeID The id of the node that was deleted
+ * @param {List[Object]} nodes All the nodes in the scene
+ * @param {List[Object]} edges All the edges in the scene
+ */
+function updateBusDataOnNodeDelete(deletedNodeID, nodes, edges) {
+  const deletedEdges = edges.filter((edge) => edge.source === deletedNodeID || edge.target === deletedNodeID);
+  deletedEdges.forEach((edge) => {
+    let source = nodes.find((node) => node.id === edge.source);
+    let target = nodes.find((node) => node.id === edge.target);
+    removeBusConnection(source, edge.target, false);
+    removeBusConnection(target, edge.source, true);
+  });
+}
+
+/**
+ * Create the bus_data for a bus with no connections. Used for overwriting the bus_data of a duplicated bus
+ * @returns {Object[string, List]} an Object with keys energy_flow, input_order, and output_order all set to be an empty array
+ */
 function getEmptyBusdata() {
   return {
     energy_flow: [],
@@ -50,4 +78,4 @@ function getEmptyBusdata() {
   };
 }
 
-export { updateBusDataOnEdgeConnect, updateBusDataOnEdgeDelete, getEmptyBusdata };
+export { updateBusDataOnEdgeConnect, removeBusConnection, getEmptyBusdata, updateBusDataOnNodeDelete };

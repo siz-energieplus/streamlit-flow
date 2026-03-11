@@ -8,7 +8,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ResieInputMenu from './ResieInputMenu/ResieInputMenu';
 import { getEdgesWithMediumMismatch } from '../HandleUtils';
-import { getEmptyBusdata } from '../BusDataUtils';
+import { getEmptyBusdata, updateBusDataOnNodeDelete } from '../BusDataUtils';
 
 const EditNodeModal = ({
   show,
@@ -131,6 +131,7 @@ const NodeContextMenu = ({
       const updatedEdges = edges.filter(
         (edge) => edge.source !== nodeContextMenu.node.id && edge.target !== nodeContextMenu.node.id
       );
+      updateBusDataOnNodeDelete(nodeContextMenu.node.id, nodes, edges);
       setNodes(updatedNodes);
       setEdges(updatedEdges);
       handleDataReturnToStreamlit(updatedNodes, updatedEdges, null);
