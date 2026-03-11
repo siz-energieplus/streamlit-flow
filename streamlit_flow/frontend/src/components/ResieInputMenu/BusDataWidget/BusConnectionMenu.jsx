@@ -8,16 +8,17 @@ export default function BusConnectionMenu({ node }) {
 
   return (
     <>
-      <Row className="g-2 mt-1 mt-md-0">
-        <Col md>
-          <h5>Input Order</h5>
-          <DragAndDropMenu initialItems={node.data.bus_data.input_order} />
-        </Col>
-        <Col md>
-          <h5>Output Order</h5>
-          <DragAndDropMenu initialItems={node.data.bus_data.output_order} />
-        </Col>
-      </Row>
+      <Modal.Body>
+        <Modal.Header>Priorities</Modal.Header>
+        <Row className="g-2 mt-1 mt-md-0">
+          <Col md>
+            <DragAndDropMenu title="Input Order" initialItems={node.data.bus_data.input_order} />
+          </Col>
+          <Col md>
+            <DragAndDropMenu title="Output Order" initialItems={node.data.bus_data.output_order} />
+          </Col>
+        </Row>
+      </Modal.Body>
     </>
   );
 }

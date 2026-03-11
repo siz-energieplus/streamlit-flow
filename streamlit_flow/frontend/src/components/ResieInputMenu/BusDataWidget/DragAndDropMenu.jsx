@@ -1,18 +1,31 @@
 import { useState } from 'react';
-import { Reorder } from 'framer-motion';
+import { useMotionValue, Reorder } from 'framer-motion';
+import { useRaisedShadow } from './use-raised-shadow';
+import './reorder-styles.css';
 
-export default function DragAndDropMenu({ initialItems, onOrderChange }) {
+export default function DragAndDropMenu({ title, initialItems, onOrderChange }) {
   // initialItems = ['🍅 Tomato', '🥒 Cucumber', '🧀 Cheese', '🥬 Lettuce'];
   const [items, setItems] = useState(initialItems);
 
   return (
-    // <header> Drag and drop list</header>
-    <Reorder.Group axis="y" values={items} onReorder={setItems}>
-      {items.map((item) => (
-        <Reorder.Item key={item} value={item}>
-          {item}
-        </Reorder.Item>
-      ))}
-    </Reorder.Group>
+    <div class="drag-drop-menu">
+      <header> {title}</header>
+      <Reorder.Group axis="y" values={items} onReorder={setItems}>
+        {items.map((item) => (
+          <Item key={item} item={item} />
+        ))}
+      </Reorder.Group>
+    </div>
   );
 }
+
+export const Item = ({ item }) => {
+  const y = useMotionValue(0);
+  const boxShadow = useRaisedShadow(y);
+
+  return (
+    <Reorder.Item value={item} id={item} style={{ boxShadow, y }}>
+      <span>{item}</span>
+    </Reorder.Item>
+  );
+};
