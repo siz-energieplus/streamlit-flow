@@ -2,10 +2,12 @@ import DragAndDropMenu from './DragAndDropMenu';
 import { Col, Row } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import { getEnergyFlowOnOutputOrderChange, getEnergyFlowOnInputOrderChange } from '../../../BusDataUtils';
+import EnergyFlowMatrix from './EnergyFlowMatrix';
 
 export default function BusConnectionMenu({ node, nodes, onBusDataChange }) {
   if (node.data.component_type.toLowerCase() !== 'bus') return <></>;
   let busData = node.data.bus_data;
+  if (busData.input_order == 0 || busData.output_order == 0) return <></>;
 
   function onInputOrderChange(order) {
     let newBusData = {
@@ -23,6 +25,7 @@ export default function BusConnectionMenu({ node, nodes, onBusDataChange }) {
     };
     onBusDataChange(newBusData);
   }
+  function onEnergyFlowChange(energyFlow) {}
 
   return (
     <>
@@ -46,6 +49,16 @@ export default function BusConnectionMenu({ node, nodes, onBusDataChange }) {
             />
           </Col>
         </Row>
+      </Modal.Body>
+
+      <Modal.Body>
+        <Modal.Header>Energy Flow Matrix</Modal.Header>
+        <EnergyFlowMatrix
+          input_order={busData.input_order}
+          output_order={busData.output_order}
+          energyFlow={busData.energy_flow}
+          onEnergyFlowChange={onEnergyFlowChange}
+        />
       </Modal.Body>
     </>
   );
