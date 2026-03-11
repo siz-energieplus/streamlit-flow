@@ -16,11 +16,11 @@ export default function EnergyFlowMatrix({ energyFlow, input_order, output_order
           </tr>
         </thead>
         <tbody>
-          {[...Array(input_order)].map((node_id, i) => (
+          {input_order.map((node_id, row) => (
             <tr>
               <th scope="row">{node_id}</th>
-              {energyFlow[i].map((element) => (
-                <td>{element}</td>
+              {energyFlow[row].map((element, col) => (
+                <td>{element}</td> // replace with input widget
               ))}
             </tr>
           ))}

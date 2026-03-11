@@ -3,16 +3,12 @@ import { useMotionValue, Reorder } from 'framer-motion';
 import { useRaisedShadow } from './use-raised-shadow';
 import './reorder-styles.css';
 
-export default function DragAndDropMenu({ title, menuNodeIDs, onOrderChange, allNodes }) {
-  let menuNodes = menuNodeIDs.map((id) => allNodes.find((n) => n.id == id));
-  let menuNodeNames = menuNodes.map((node) => node.data.content);
-  const [items, setItems] = useState(menuNodeNames);
+export default function DragAndDropMenu({ title, nodeNames, onOrderChange }) {
+  const [items, setItems] = useState(nodeNames);
 
   function onReorder(order) {
     setItems(order);
-    console.log(order);
-    let nodeIDs = order.map((name) => allNodes.find((node) => node.data.content === name).id);
-    onOrderChange(nodeIDs);
+    onOrderChange(order);
   }
 
   return (

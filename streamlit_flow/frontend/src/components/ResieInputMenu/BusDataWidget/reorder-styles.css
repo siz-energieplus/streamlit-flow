@@ -35,3 +35,7 @@ li {
 .drag-drop-menu header {
   margin-bottom: 10px;
 }
+
+.table {
+  padding: 15px;
+}
