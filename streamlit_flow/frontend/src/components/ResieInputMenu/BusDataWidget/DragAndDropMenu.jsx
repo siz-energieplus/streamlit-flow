@@ -3,16 +3,24 @@ import { useMotionValue, Reorder } from 'framer-motion';
 import { useRaisedShadow } from './use-raised-shadow';
 import './reorder-styles.css';
 
-export default function DragAndDropMenu({ title, initialItems, onOrderChange }) {
-  // initialItems = ['🍅 Tomato', '🥒 Cucumber', '🧀 Cheese', '🥬 Lettuce'];
-  const [items, setItems] = useState(initialItems);
+export default function DragAndDropMenu({ title, menuNodeIDs, onOrderChange, allNodes }) {
+  let menuNodes = menuNodeIDs.map((id) => allNodes.find((n) => n.id == id));
+  let menuNodeNames = menuNodes.map((node) => node.data.content);
+  const [items, setItems] = useState(menuNodeNames);
+
+  function onReorder(order) {
+    setItems(order);
+    console.log(order);
+    let nodeIDs = order.map((name) => allNodes.find((node) => node.data.content === name).id);
+    onOrderChange(nodeIDs);
+  }
 
   return (
     <div class="drag-drop-menu">
       <header> {title}</header>
-      <Reorder.Group axis="y" values={items} onReorder={setItems}>
-        {items.map((item) => (
-          <Item key={item} item={item} />
+      <Reorder.Group axis="y" values={items} onReorder={onReorder}>
+        {items.map((nodeName) => (
+          <Item key={nodeName} item={nodeName} />
         ))}
       </Reorder.Group>
     </div>

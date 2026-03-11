@@ -78,4 +78,36 @@ function getEmptyBusdata() {
   };
 }
 
-export { updateBusDataOnEdgeConnect, removeBusConnection, getEmptyBusdata, updateBusDataOnNodeDelete };
+function getEnergyFlowOnInputOrderChange(oldInputOrder, newInputOrder, energyFlow) {
+  // inputs are rows
+  let newEnergyFlow = [];
+  newInputOrder.forEach((nodeID) => {
+    let oldIndex = oldInputOrder.findIndex((id) => nodeID === id);
+    newEnergyFlow.push(energyFlow[oldIndex]);
+  });
+  return newEnergyFlow;
+}
+function getEnergyFlowOnOutputOrderChange(oldOutputOrder, newOutputOrder, energyFlow) {
+  // outputs are columns
+  let newEnergyFlow = [];
+  energyFlow.forEach((row) => {
+    // reorder each row of the energy flow matrix according to the new output order
+    let newRow = [];
+    newOutputOrder.forEach((nodeID) => {
+      let oldIndex = oldOutputOrder.findIndex((id) => nodeID === id);
+      let energyFlowElement = row[oldIndex];
+      newRow.push(energyFlowElement);
+    });
+    newEnergyFlow.push(newRow);
+  });
+  return newEnergyFlow;
+}
+
+export {
+  updateBusDataOnEdgeConnect,
+  removeBusConnection,
+  getEmptyBusdata,
+  updateBusDataOnNodeDelete,
+  getEnergyFlowOnInputOrderChange,
+  getEnergyFlowOnOutputOrderChange,
+};

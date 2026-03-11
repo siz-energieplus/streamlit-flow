@@ -52,6 +52,9 @@ const EditNodeModal = ({
     let edgesToDelete = getEdgesWithMediumMismatch(edges, editedNode, resieName);
     setEdgesToDelete(edgesToDelete);
   };
+  const onNodeBusDataChange = (busData) => {
+    setEditedNode((editedNode) => ({ ...editedNode, data: { ...editedNode.data, bus_data: busData } }));
+  };
 
   const handleSaveChanges = (e) => {
     const updatedNodes = nodes.map((n) => (n.id === editedNode.id ? editedNode : n));
@@ -86,8 +89,10 @@ const EditNodeModal = ({
       </Modal.Body>
       <ResieInputMenu
         node={editedNode}
+        nodes={nodes}
         onValueChange={onNodeInputValueChange}
         onIncludedChange={onNodeInputIncludedChange}
+        onBusDataChange={onNodeBusDataChange}
       />
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>

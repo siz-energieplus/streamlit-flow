@@ -2,7 +2,7 @@ import RequiredInputMenu from './RequiredInputMenu';
 import OptionalInputMenu from './OptionalInputMenu';
 import BusConnectionMenu from './BusDataWidget/BusConnectionMenu';
 
-function ResieInputMenu({ node, onValueChange, onIncludedChange }) {
+function ResieInputMenu({ node, nodes, onValueChange, onIncludedChange, onBusDataChange }) {
   let nodeInputObjects = node.data.resie_data;
   let requiredInputs = nodeInputObjects.filter((obj) => obj.required);
   let optionalInputs = nodeInputObjects.filter((obj) => !obj.required);
@@ -15,7 +15,7 @@ function ResieInputMenu({ node, onValueChange, onIncludedChange }) {
         onValueChange={onValueChange}
         onIncludedChange={onIncludedChange}
       />
-      <BusConnectionMenu node={node} />
+      <BusConnectionMenu node={node} nodes={nodes} onBusDataChange={onBusDataChange} />
     </>
   );
 }
