@@ -85,7 +85,7 @@ const EditNodeModal = ({
         </Row>
       </Modal.Body>
       <ResieInputMenu
-        nodeInputObjects={editedNode.data.resie_data}
+        node={editedNode}
         onValueChange={onNodeInputValueChange}
         onIncludedChange={onNodeInputIncludedChange}
       />
