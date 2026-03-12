@@ -39,3 +39,6 @@ li {
 .table {
   padding: 15px;
 }
+td {
+  min-width: 100px;
+}

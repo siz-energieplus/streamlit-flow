@@ -36,7 +36,14 @@ export default function BusConnectionMenu({ node, nodes, onBusDataChange }) {
     };
     onBusDataChange(newBusData);
   }
-  function onEnergyFlowChange(energyFlow) {}
+  function onEnergyFlowChange(energyFlow) {
+    let newBusData = {
+      input_order: busData.input_order,
+      output_order: busData.output_order,
+      energy_flow: energyFlow,
+    };
+    onBusDataChange(newBusData);
+  }
 
   return (
     <>
@@ -65,7 +72,7 @@ export default function BusConnectionMenu({ node, nodes, onBusDataChange }) {
         <EnergyFlowMatrix
           input_order={getNodeNamesFromIDs(busData.input_order, nodes)}
           output_order={getNodeNamesFromIDs(busData.output_order, nodes)}
-          energyFlow={busData.energy_flow}
+          initialEnergyFlow={busData.energy_flow}
           onEnergyFlowChange={onEnergyFlowChange}
         />
       </Modal.Body>

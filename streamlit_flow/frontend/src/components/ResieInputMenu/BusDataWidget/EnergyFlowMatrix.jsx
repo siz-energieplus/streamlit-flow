@@ -1,8 +1,19 @@
-import { Form, FloatingLabel } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
+import { useState, useEffect } from 'react';
 
-export default function EnergyFlowMatrix({ energyFlow, input_order, output_order, onEnergyFlowChange }) {
-  //
-  function onInputChange(row, col, value) {}
+export default function EnergyFlowMatrix({ initialEnergyFlow, input_order, output_order, onEnergyFlowChange }) {
+  const [energyFlow, setEnergyFlow] = useState(initialEnergyFlow);
+  useEffect(() => {
+    setEnergyFlow(initialEnergyFlow);
+  }, [initialEnergyFlow]);
+
+  function onInputChange(row, col, value) {
+    let newEnergyFlow = JSON.parse(JSON.stringify(energyFlow));
+    newEnergyFlow[row][col] = parseInt(value);
+    setEnergyFlow(newEnergyFlow);
+    onEnergyFlowChange(newEnergyFlow);
+  }
+  // let energyFlow = initialEnergyFlow;
 
   return (
     <>
@@ -20,18 +31,18 @@ export default function EnergyFlowMatrix({ energyFlow, input_order, output_order
             <tr>
               <th scope="row">{node_id}</th>
               {energyFlow[row].map((element, col) => (
-                <td>{element}</td> // replace with input widget
+                <td>
+                  <Form.Control
+                    type="number"
+                    value={element}
+                    onChange={(e) => onInputChange(row, col, e.target.value)}
+                  />
+                </td>
               ))}
             </tr>
           ))}
         </tbody>
       </table>
-      {/* <Form.Control
-              type="number"
-              placeholder={displayName}
-              value={inputValue}
-              onChange={(e) => onInputChanged(e.target.value)}
-              /> */}
     </>
   );
 }
