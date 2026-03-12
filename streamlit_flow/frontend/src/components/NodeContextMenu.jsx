@@ -152,6 +152,36 @@ const NodeContextMenu = ({
   };
 
   /**
+   * Seperate the node name into the text part and the number at the end,
+   * And increase the number at the end until it's a unique name
+   * @param {string} name The name of the node being duplicated
+   * @param {*} nodes A list of all the nodes in the scene
+   * @returns {string} The name for the duplicated node
+   */
+  const findNameForDuplicate = (name, nodes) => {
+    // divide the node name into a string part nameBase and whatever number is at the end of the name
+    // if there is no number, the nameBase will just be the name and the new number will be 1
+    const match = name.match(/^(.*?)(\d+)$/);
+    let nameBase = match ? match[1] : name;
+    let number = match ? parseInt(match[2]) + 1 : 1;
+    // increase number until the name 'nameBase + number' (with and without 0 padding) is not taken
+    while (nodes.find((node) => nameMatches(node.data.content, nameBase, number))) {
+      number++;
+    }
+    return getPaddedName(nameBase, number);
+
+    /** Get the node name where the number is zero padded to >2 digits */
+    function getPaddedName(nameBase, number) {
+      let paddedNumber = (number < 10 ? '0' : '') + number;
+      return nameBase + paddedNumber;
+    }
+    /** Check if the name matches either the regular or padded version of nameBase+number */
+    function nameMatches(nameToCheck, nameBase, number) {
+      return nameToCheck === getPaddedName(nameBase, number) || nameToCheck === nameBase + number;
+    }
+  };
+
+  /**
    * Duplicate the selected node. Move the duplicated node towards the bottom right.
    * Give the duplicated node a unique ID and name.
    */
@@ -164,13 +194,7 @@ const NodeContextMenu = ({
     duplicateNode.id = nodeToDuplicate.id + '_' + new Date().getTime();
     let isBus = duplicateNode.data.component_type.toLowerCase() === 'bus';
     duplicateNode.data.bus_data = isBus ? getEmptyBusdata() : null;
-    // find node name that is not taken
-    let duplicateNodeName = nodeToDuplicate.data.content + '_COPY_';
-    let nameSuffix = 0;
-    while (nodes.findIndex((node) => node.data.content === duplicateNodeName + nameSuffix) !== -1) {
-      nameSuffix++;
-    }
-    duplicateNode.data.content = duplicateNodeName + nameSuffix;
+    duplicateNode.data.content = findNameForDuplicate(nodeToDuplicate.data.content, nodes);
     // update list of nodes
     let updatedNodes = [...nodes, duplicateNode];
     setNodes(updatedNodes);
