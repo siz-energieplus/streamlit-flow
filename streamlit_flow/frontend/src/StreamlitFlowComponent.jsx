@@ -25,7 +25,7 @@ import PaneConextMenu from './components/PaneContextMenu';
 import NodeContextMenu from './components/NodeContextMenu';
 import EdgeContextMenu from './components/EdgeContextMenu';
 import { isHandleTaken, mediumsMatch, getMediumKey, getMedium } from './HandleUtils';
-import { updateBusDataOnEdgeConnect } from './BusDataUtils';
+import { updateBusDataOnEdgeConnect } from './components/BusDataWidget/BusDataUtils';
 
 import createElkGraphLayout from './layouts/ElkLayout';
 

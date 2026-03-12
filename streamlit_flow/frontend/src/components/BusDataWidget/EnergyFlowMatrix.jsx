@@ -3,17 +3,25 @@ import { useState, useEffect } from 'react';
 
 export default function EnergyFlowMatrix({ initialEnergyFlow, input_order, output_order, onEnergyFlowChange }) {
   const [energyFlow, setEnergyFlow] = useState(initialEnergyFlow);
+
+  // update the energy flow, so changes from outside the component are still displayed correctly
   useEffect(() => {
     setEnergyFlow(initialEnergyFlow);
   }, [initialEnergyFlow]);
 
+  /**
+   * update the energy flow matrix with the value change
+   * both in the component state and in the node array
+   * @param {int} row the row the edited element is in
+   * @param {int} col the col the edited element is in
+   * @param {string} value the new value of the element as a string
+   */
   function onInputChange(row, col, value) {
     let newEnergyFlow = JSON.parse(JSON.stringify(energyFlow));
     newEnergyFlow[row][col] = parseInt(value);
     setEnergyFlow(newEnergyFlow);
     onEnergyFlowChange(newEnergyFlow);
   }
-  // let energyFlow = initialEnergyFlow;
 
   return (
     <>

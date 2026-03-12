@@ -7,7 +7,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-import { removeBusConnection } from '../BusDataUtils';
+import { removeBusConnection } from './BusDataWidget/BusDataUtils';
 
 const EditEdgeModal = ({
   show,

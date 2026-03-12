@@ -78,6 +78,13 @@ function getEmptyBusdata() {
   };
 }
 
+/**
+ * Calculates how the energy flow matrix should change when the input order list changes
+ * @param {*} oldInputOrder The previous input_order list (string node id)
+ * @param {*} newInputOrder The new input_order list (string node id)
+ * @param {*} energyFlow The energy flow integer matrix
+ * @returns the new energy flow integer matrix
+ */
 function getEnergyFlowOnInputOrderChange(oldInputOrder, newInputOrder, energyFlow) {
   // inputs are rows
   let newEnergyFlow = [];
@@ -87,6 +94,14 @@ function getEnergyFlowOnInputOrderChange(oldInputOrder, newInputOrder, energyFlo
   });
   return newEnergyFlow;
 }
+
+/**
+ * Calculates how the energy flow matrix should change when the output order changes
+ * @param {*} oldOutputOrder The previous output_order list (string node id)
+ * @param {*} newOutputOrder The new output_order list (string node id)
+ * @param {*} energyFlow the energy flow integer matrix
+ * @returns The new energy flow integer matrix
+ */
 function getEnergyFlowOnOutputOrderChange(oldOutputOrder, newOutputOrder, energyFlow) {
   // outputs are columns
   let newEnergyFlow = [];

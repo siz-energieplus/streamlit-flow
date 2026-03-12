@@ -8,7 +8,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ResieInputMenu from './ResieInputMenu/ResieInputMenu';
 import { getEdgesWithMediumMismatch } from '../HandleUtils';
-import { getEmptyBusdata, updateBusDataOnNodeDelete } from '../BusDataUtils';
+import { getEmptyBusdata, updateBusDataOnNodeDelete } from './BusDataWidget/BusDataUtils';
 
 const EditNodeModal = ({
   show,

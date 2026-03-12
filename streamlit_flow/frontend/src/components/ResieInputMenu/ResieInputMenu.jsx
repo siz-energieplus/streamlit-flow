@@ -1,6 +1,6 @@
 import RequiredInputMenu from './RequiredInputMenu';
 import OptionalInputMenu from './OptionalInputMenu';
-import BusConnectionMenu from './BusDataWidget/BusConnectionMenu';
+import BusConnectionMenu from '../BusDataWidget/BusConnectionMenu';
 
 function ResieInputMenu({ node, nodes, onValueChange, onIncludedChange, onBusDataChange }) {
   let nodeInputObjects = node.data.resie_data;
