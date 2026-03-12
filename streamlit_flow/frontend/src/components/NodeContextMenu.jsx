@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/esm/ButtonGroup';
 import Modal from 'react-bootstrap/Modal';
@@ -119,6 +119,13 @@ const NodeContextMenu = ({
   const [showModal, setShowModal] = useState(false);
   const [modalClosing, setModalClosing] = useState(false);
 
+  // Check if the node still exists and if it was deleted somehow, close the context menu
+  // This can happen if the user clicked 'Clear Graph' while the context menu was open
+  useEffect(() => {
+    let nodeInList = nodes.find((node) => node.id === nodeContextMenu.node.id);
+    if (nodeInList === undefined) setNodeContextMenu(null);
+  });
+
   const handleClose = () => {
     setShowModal(false);
     setModalClosing(true);
@@ -190,15 +197,15 @@ const NodeContextMenu = ({
             <Button variant="outline-primary" onClick={handleEditNode}>
               <i className="bi bi-tools"></i> Edit Node
             </Button>
+            <Button variant="outline-primary" onClick={handleDuplicateNode}>
+              <i class="bi bi-copy"></i> Duplicate Node
+            </Button>
             <Button
               variant={nodeContextMenu.node.deletable ? 'outline-danger' : 'secondary'}
               onClick={handleDeleteNode}
               disabled={!nodeContextMenu.node.deletable}
             >
               <i className="bi bi-trash3"></i> Delete Node
-            </Button>
-            <Button variant="outline-primary" onClick={handleDuplicateNode}>
-              <i class="bi bi-copy"></i> Duplicate Node
             </Button>
           </ButtonGroup>
         )}
