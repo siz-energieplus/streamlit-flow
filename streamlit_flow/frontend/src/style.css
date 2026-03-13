@@ -55,7 +55,7 @@ path.react-flow__edge-path {
 /* The CSS Settings for the Edit Node Modal */
 .modal-open .modal {
   width: 100% !important;
-  padding: 100px !important;
+  padding: 10px 80px !important;
 }
 .modal-dialog {
   --bs-modal-width: 100%;

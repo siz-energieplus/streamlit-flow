@@ -10,13 +10,22 @@ ul {
   width: auto;
 }
 
+:root {
+  --drag-drop-menu-color: rgb(231, 225, 244);
+  --drag-drop-outline-color: #dbdbdb;
+}
+[theme='dark'] {
+  --drag-drop-menu-color: rgb(50, 50, 53);
+  --drag-drop-outline-color: rgb(126, 126, 126);
+}
+
 li {
   border-radius: 10px;
   margin-bottom: 10px;
   width: auto;
   padding: 15px 18px;
   position: relative;
-  background: rgb(47, 47, 47);
+  background: var(--drag-drop-menu-color);
   border-radius: 5px;
   display: flex;
   justify-content: space-between;
@@ -27,7 +36,7 @@ li {
   padding: 10px;
   margin: 5px;
   border-width: 1px;
-  border-color: rgb(104, 104, 104);
+  border-color: var(--drag-drop-outline-color);
   border-style: solid;
   border-radius: 5px;
 }

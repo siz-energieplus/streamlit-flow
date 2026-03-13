@@ -59,7 +59,7 @@ const StreamlitFlowComponent = (props) => {
   const reactFlowInstance = useReactFlow();
   const { fitView, getNodes, getEdges } = useReactFlow();
 
-  const susiContext = { mediums: props.args.additionalData.mediums };
+  const susiContext = { mediums: props.args.additionalData.mediums, theme: props.theme.base };
 
   // Helper Functions
   const handleLayout = () => {
