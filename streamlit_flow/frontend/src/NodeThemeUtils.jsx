@@ -1,16 +1,16 @@
 const nodeTypeColors_dark = {
   heat: '#bc1b1b',
-  special: '#1D1446',
+  special: '#6541ca',
   other: '#32c8bc',
-  general: '#000000',
+  general: '#151515',
   electricity: '#eeb014',
 };
 const nodeTypeColors_light = {
-  heat: '#da8d8d',
-  special: '#d1c6ff',
-  other: '#befef9',
-  general: '#bebebe',
-  electricity: '#ffe8ad',
+  heat: '#D49494',
+  special: '#BEB4FF',
+  other: '#81D2C0',
+  general: '#F1F1F1',
+  electricity: '#FFDB71',
 };
 
 function getNodeStyle(nodeCategory, theme, highlighted) {
