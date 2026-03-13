@@ -74,7 +74,7 @@ export default function BusConnectionMenu({ node, nodes, onBusDataChange }) {
 
   return (
     <>
-      <Modal.Body>
+      <Modal.Body className="side-padded-menu">
         <Modal.Header>Priorities</Modal.Header>
         <Row className="g-2 mt-1 mt-md-0">
           <Col md>

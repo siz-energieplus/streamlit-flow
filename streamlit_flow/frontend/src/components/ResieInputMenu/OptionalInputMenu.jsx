@@ -8,7 +8,7 @@ function OptionalInputMenu({ optionalInputObjects, onValueChange, onIncludedChan
 
   return (
     <>
-      <Modal.Body>
+      <Modal.Body className="side-padded-menu">
         <Modal.Header>Optional Inputs</Modal.Header>
         {optionalInputObjects.map((nodeInput) => (
           <OptionalInputField
@@ -38,8 +38,8 @@ function OptionalInputField({ nodeInput, onValueChange, startIncluded, onInclude
   };
 
   return (
-    <Row className="g-2 mt-1 mt-md-0">
-      <Col md>
+    <Row className="g-2 mt-1 mt-md-0 optional-input-row">
+      <Col className="optional-input-checkbox">
         <Form.Check
           type="switch"
           checked={isIncluded}
@@ -49,7 +49,7 @@ function OptionalInputField({ nodeInput, onValueChange, startIncluded, onInclude
           onChange={onSwitchClicked}
         />
       </Col>
-      <Col md>
+      <Col className="optonal-input-input-field">
         <CustomInputField nodeInput={nodeInput} onEdit={onValueFieldEdit} />
       </Col>
     </Row>

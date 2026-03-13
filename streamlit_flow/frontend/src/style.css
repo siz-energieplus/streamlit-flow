@@ -1,47 +1,47 @@
 .markdown-node * {
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 :root {
-    --color-canvas-default: #ffffff;
-    --color-canvas-subtle: #f6f8fa;
-    --color-border-default: #d0d7de;
-    --color-border-muted: hsla(210, 18%, 87%, 1);
+  --color-canvas-default: #ffffff;
+  --color-canvas-subtle: #f6f8fa;
+  --color-border-default: #d0d7de;
+  --color-border-muted: hsla(210, 18%, 87%, 1);
 }
 
 table {
-    border-spacing: 0;
-    border-collapse: collapse;
-    display: block;
-    margin-top: 0;
-    margin-bottom: 16px;
-    width: max-content;
-    max-width: 100%;
-    overflow: auto;
+  border-spacing: 0;
+  border-collapse: collapse;
+  display: block;
+  margin-top: 0;
+  margin-bottom: 16px;
+  width: max-content;
+  max-width: 100%;
+  overflow: auto;
 }
 
 tr {
-    background-color: var(--color-canvas-default);
-    border-top: 1px solid var(--color-border-muted);
+  background-color: var(--color-canvas-default);
+  border-top: 1px solid var(--color-border-muted);
 }
 
 tr:nth-child(2n) {
-    background-color: var(--color-canvas-subtle);
+  background-color: var(--color-canvas-subtle);
 }
 
 td,
 th {
-    padding: 6px 13px;
-    border: 1px solid var(--color-border-default);
+  padding: 6px 13px;
+  border: 1px solid var(--color-border-default);
 }
 
 th {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 table img {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 .bus-handle {
@@ -50,4 +50,40 @@ table img {
 
 path.react-flow__edge-path {
   stroke-width: 2;
+}
+
+/* The CSS Settings for the Edit Node Modal */
+.modal-open .modal {
+  width: 100% !important;
+  padding: 100px !important;
+}
+.modal-dialog {
+  --bs-modal-width: 100%;
+}
+
+.side-padded-menu {
+  padding: 10px 10%;
+}
+
+.modal-header {
+  font-size: 20px;
+  font-weight: 500;
+  padding: 10px;
+}
+
+/* Optional Menu Styling */
+.optional-input-row {
+  display: inline-flex;
+  gap: 30px;
+  width: 100%;
+}
+
+.optional-input-checkbox {
+  display: grid;
+  justify-content: right;
+  min-width: fit-content;
+  flex-grow: 1;
+}
+.optonal-input-input-field {
+  flex-grow: 4;
 }
