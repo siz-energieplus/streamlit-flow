@@ -53,8 +53,6 @@ const StreamlitFlowComponent = (props) => {
   const [nodeContextMenu, setNodeContextMenu] = useState(null);
   const [edgeContextMenu, setEdgeContextMenu] = useState(null);
 
-  const [theme, setTheme] = useState(null);
-
   const nodesInitialized = useNodesInitialized({ includeHiddenNodes: false });
 
   const ref = useRef(null);
@@ -109,7 +107,6 @@ const StreamlitFlowComponent = (props) => {
   // when the theme changes
   useEffect(() => {
     setNodes(setNodesStyle(nodes, props.theme.base));
-    setTheme(props.theme.base);
   }, [props.theme.base]);
 
   useEffect(() => Streamlit.setFrameHeight());
