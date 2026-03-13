@@ -26,6 +26,7 @@ import NodeContextMenu from './components/NodeContextMenu';
 import EdgeContextMenu from './components/EdgeContextMenu';
 import { isHandleTaken, mediumsMatch, getMediumKey, getMedium } from './HandleUtils';
 import { updateBusDataOnEdgeConnect } from './components/BusDataWidget/BusDataUtils';
+import { setNodesStyle } from './NodeThemeUtils';
 
 import createElkGraphLayout from './layouts/ElkLayout';
 
@@ -51,6 +52,8 @@ const StreamlitFlowComponent = (props) => {
   const [paneContextMenu, setPaneContextMenu] = useState(null);
   const [nodeContextMenu, setNodeContextMenu] = useState(null);
   const [edgeContextMenu, setEdgeContextMenu] = useState(null);
+
+  const [theme, setTheme] = useState(null);
 
   const nodesInitialized = useNodesInitialized({ includeHiddenNodes: false });
 
@@ -103,6 +106,12 @@ const StreamlitFlowComponent = (props) => {
     setEdgeContextMenu(null);
   };
 
+  // when the theme changes
+  useEffect(() => {
+    setNodes(setNodesStyle(nodes, props.theme.base));
+    setTheme(props.theme.base);
+  }, [props.theme.base]);
+
   useEffect(() => Streamlit.setFrameHeight());
 
   // Layout calculation
@@ -114,7 +123,8 @@ const StreamlitFlowComponent = (props) => {
   useEffect(() => {
     if (lastUpdateTimestamp <= props.args.timestamp) {
       setLayoutNeedsUpdate(true);
-      setNodes(props.args.nodes);
+      let updatedNodes = setNodesStyle(props.args.nodes, props.theme.base);
+      setNodes(updatedNodes);
       setEdges(props.args.edges);
       setLastUpdateTimestamp(new Date().getTime());
       handleDataReturnToStreamlit(props.args.nodes, props.args.edges, null);
@@ -143,7 +153,6 @@ const StreamlitFlowComponent = (props) => {
   }, [props.theme.base]);
 
   // Context Menu Callbacks
-
   const handlePaneContextMenu = (event) => {
     event.preventDefault();
 
