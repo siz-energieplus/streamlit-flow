@@ -13,33 +13,56 @@ const nodeTypeColors_light = {
   electricity: '#ffe8ad',
 };
 
-function getNodeStyle(nodeCategory, theme) {
+function getNodeStyle(nodeCategory, theme, highlighted) {
   if (theme.toLowerCase() === 'dark') {
     return {
       color: 'white',
       backgroundColor: nodeTypeColors_dark[nodeCategory],
-      border: '1px solid white',
+      border: getBorder(theme, highlighted),
     };
   } else {
     return {
       color: 'black',
       backgroundColor: nodeTypeColors_light[nodeCategory],
-      border: '1px solid black',
+      border: getBorder(theme, highlighted),
     };
   }
 }
 
-function setNodesStyle(nodes, theme) {
+function styleNodeSelected(prevSelectedNodeID, selectedNodeID, nodes, theme) {
+  if (prevSelectedNodeID) {
+    const node = nodes.find((node) => node.id === prevSelectedNodeID);
+    if (node) node.style.border = getBorder(theme, false);
+  }
+  if (selectedNodeID) {
+    const node = nodes.find((node) => node.id === selectedNodeID);
+    node.style.border = getBorder(theme, true);
+  }
+  return nodes;
+}
+
+function getBorder(theme, highlight = false) {
+  const borderThickness = highlight ? 4 : 1;
+  let borderColor = theme === 'dark' ? '#d1d1d1' : '#282828';
+  if (highlight) {
+    borderColor = theme === 'dark' ? '#ffffff' : '#000000';
+  }
+  const border = borderThickness + 'px solid ' + borderColor;
+  return border;
+}
+
+function setNodesStyle(nodes, theme, selectedNodeID = null) {
   if (nodes.constructor !== Array) return nodes;
   let updatedNodes = JSON.parse(JSON.stringify(nodes));
   updatedNodes.forEach((node) => {
     if (!node.data.node_category) return;
-    let category = node.data.node_category.toLowerCase();
-    let style = getNodeStyle(category, theme);
+    const category = node.data.node_category.toLowerCase();
+    const highlighted = node.id === selectedNodeID;
+    let style = getNodeStyle(category, theme, highlighted);
     style.width = 'auto';
     node.style = style;
   });
   return updatedNodes;
 }
 
-export { setNodesStyle };
+export { setNodesStyle, styleNodeSelected };

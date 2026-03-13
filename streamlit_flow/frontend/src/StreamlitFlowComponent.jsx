@@ -26,7 +26,7 @@ import NodeContextMenu from './components/NodeContextMenu';
 import EdgeContextMenu from './components/EdgeContextMenu';
 import { isHandleTaken, mediumsMatch, getMediumKey, getMedium } from './HandleUtils';
 import { updateBusDataOnEdgeConnect } from './components/BusDataWidget/BusDataUtils';
-import { setNodesStyle } from './NodeThemeUtils';
+import { setNodesStyle, styleNodeSelected } from './NodeThemeUtils';
 
 import createElkGraphLayout from './layouts/ElkLayout';
 
@@ -54,6 +54,7 @@ const StreamlitFlowComponent = (props) => {
   const [edgeContextMenu, setEdgeContextMenu] = useState(null);
 
   const nodesInitialized = useNodesInitialized({ includeHiddenNodes: false });
+  const [selectedNodeID, setNodeSelected] = useState(null);
 
   const ref = useRef(null);
   const reactFlowInstance = useReactFlow();
@@ -69,7 +70,7 @@ const StreamlitFlowComponent = (props) => {
         setNodes(nodes);
         setEdges(edges);
         setViewFitAfterLayout(false);
-        handleDataReturnToStreamlit(nodes, edges, null);
+        handleDataReturnToStreamlit(nodes, edges, selectedNodeID);
         setOverrideLayout(false);
         setLayoutCalculated(true);
       })
@@ -77,6 +78,10 @@ const StreamlitFlowComponent = (props) => {
   };
 
   const handleDataReturnToStreamlit = (_nodes, _edges, selectedId) => {
+    // set selected node
+    styleNodeSelected(selectedNodeID, selectedId, _nodes, props.theme.base);
+    setNodeSelected(selectedId);
+    // get timestamp
     const timestamp = new Date().getTime();
     setLastUpdateTimestamp(timestamp);
     Streamlit.setComponentValue({
@@ -106,7 +111,7 @@ const StreamlitFlowComponent = (props) => {
 
   // when the theme changes
   useEffect(() => {
-    setNodes(setNodesStyle(nodes, props.theme.base));
+    setNodes(setNodesStyle(nodes, props.theme.base, setNodeSelected));
   }, [props.theme.base]);
 
   useEffect(() => Streamlit.setFrameHeight());
@@ -120,11 +125,15 @@ const StreamlitFlowComponent = (props) => {
   useEffect(() => {
     if (lastUpdateTimestamp <= props.args.timestamp) {
       setLayoutNeedsUpdate(true);
-      let updatedNodes = setNodesStyle(props.args.nodes, props.theme.base);
+      // set node styles
+      const nodes = props.args.nodes;
+      const updatedNodes = setNodesStyle(nodes, props.theme.base);
+      const newSelectedNodeID = props.args.additionalData.selectedNodeID;
+      // set the nodes and edges
       setNodes(updatedNodes);
       setEdges(props.args.edges);
       setLastUpdateTimestamp(new Date().getTime());
-      handleDataReturnToStreamlit(props.args.nodes, props.args.edges, null);
+      handleDataReturnToStreamlit(updatedNodes, props.args.edges, newSelectedNodeID);
     }
   }, [props.args.nodes, props.args.edges]);
 
@@ -249,7 +258,7 @@ const StreamlitFlowComponent = (props) => {
       if (n.id === node.id) return node;
       return n;
     });
-    handleDataReturnToStreamlit(updatedNodes, edges, null);
+    handleDataReturnToStreamlit(updatedNodes, edges, selectedNodeID);
   };
 
   return (
