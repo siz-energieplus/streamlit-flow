@@ -321,6 +321,7 @@ const StreamlitFlowComponent = (props) => {
               edgeContextMenu={edgeContextMenu}
               setEdgeContextMenu={setEdgeContextMenu}
               nodes={nodes}
+              setNodes={setNodes}
               edges={edges}
               setEdges={setEdges}
               handleDataReturnToStreamlit={handleDataReturnToStreamlit}

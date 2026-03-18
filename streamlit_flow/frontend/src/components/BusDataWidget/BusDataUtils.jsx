@@ -118,11 +118,22 @@ function getEnergyFlowOnOutputOrderChange(oldOutputOrder, newOutputOrder, energy
   return newEnergyFlow;
 }
 
+function updateBusDataOnEdgeDelete(nodes, edge) {
+  nodes.forEach((node) => {
+    if (edge.source === node.id) {
+      removeBusConnection(node, edge.target, false);
+    } else if (edge.target === node.id) {
+      removeBusConnection(node, edge.source, true);
+    }
+  });
+}
+
 export {
   updateBusDataOnEdgeConnect,
-  removeBusConnection,
+  // removeBusConnection,
   getEmptyBusdata,
   updateBusDataOnNodeDelete,
   getEnergyFlowOnInputOrderChange,
   getEnergyFlowOnOutputOrderChange,
+  updateBusDataOnEdgeDelete,
 };

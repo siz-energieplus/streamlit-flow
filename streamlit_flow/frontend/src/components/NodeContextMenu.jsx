@@ -8,7 +8,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ResieInputMenu from './ResieInputMenu/ResieInputMenu';
 import { getEdgesWithMediumMismatch } from '../HandleUtils';
-import { getEmptyBusdata, updateBusDataOnNodeDelete } from './BusDataWidget/BusDataUtils';
+import { getEmptyBusdata, updateBusDataOnNodeDelete, updateBusDataOnEdgeDelete } from './BusDataWidget/BusDataUtils';
 
 const EditNodeModal = ({
   show,
@@ -44,20 +44,25 @@ const EditNodeModal = ({
   const changeNodeInput = (resieName, inputAttributeName, value) => {
     //change node input
     //if you don't make a copy, the change to the resie_data is applied to the nodes list, since editedNode is a reference, not a copy
-    var resie_data_copy = JSON.parse(JSON.stringify(editedNode.data.resie_data));
-    var node_input = resie_data_copy.find((obj) => obj.resie_name === resieName);
+    const resie_data_copy = JSON.parse(JSON.stringify(editedNode.data.resie_data));
+    let node_input = resie_data_copy.find((obj) => obj.resie_name === resieName);
     node_input[inputAttributeName] = value;
     setEditedNode((editedNode) => ({ ...editedNode, data: { ...editedNode.data, resie_data: resie_data_copy } }));
     // remove edge if the medium change necessitates it
-    let edgesToDelete = getEdgesWithMediumMismatch(edges, editedNode, resieName);
-    setEdgesToDelete(edgesToDelete);
+    let newEdgesToDelete = getEdgesWithMediumMismatch(edges, editedNode, resieName);
+    newEdgesToDelete = newEdgesToDelete.concat(edgesToDelete);
+    setEdgesToDelete(newEdgesToDelete);
   };
   const onNodeBusDataChange = (busData) => {
     setEditedNode((editedNode) => ({ ...editedNode, data: { ...editedNode.data, bus_data: busData } }));
   };
 
   const handleSaveChanges = (e) => {
-    const updatedNodes = nodes.map((n) => (n.id === editedNode.id ? editedNode : n));
+    let updatedNodes = nodes.map((n) => (n.id === editedNode.id ? editedNode : n));
+    edgesToDelete.forEach((edgeID) => {
+      const edge = edges.find((e) => e.id === edgeID);
+      updateBusDataOnEdgeDelete(updatedNodes, edge);
+    });
     setNodes(updatedNodes);
     const updatedEdges = edges.filter((edge) => edgesToDelete.findIndex((e) => e === edge.id) === -1);
     setEdges(updatedEdges);
