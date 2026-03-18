@@ -36,7 +36,9 @@ function styleNodeSelected(prevSelectedNodeID, selectedNodeID, nodes, theme) {
   }
   if (selectedNodeID) {
     const node = nodes.find((node) => node.id === selectedNodeID);
-    node.style.border = getBorder(theme, true);
+    if (node) {
+      node.style.border = getBorder(theme, true);
+    }
   }
   return nodes;
 }
