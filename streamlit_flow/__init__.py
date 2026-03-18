@@ -105,6 +105,8 @@ def streamlit_flow(
 
     if component_value is None:
         return state
+    if component_value["timestamp"] < state.timestamp:
+        return state
 
     if "warning_message" in component_value:
         st.session_state["warning_messages"] = [component_value["warning_message"]]
