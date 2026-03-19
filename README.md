@@ -100,6 +100,10 @@ streamlit run example.py
     * The Dropdown menu checks if an input is a medium, so its options can be the list of mediums
     * EditNodeModal can delete edges, if a change in medium makes those edges invalid 
     * Handles and Edges take color of their associated medium
+* Add Energy Flow Matrix widges and Drag and Drop List widget for Bus input_order & output_order
+* NodeContextMenu has Duplicate Node button
+* Node Colors change with theme
+* Selected Node is highlighted
 
 ## Change log
 
