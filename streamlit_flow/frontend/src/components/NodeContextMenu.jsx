@@ -170,7 +170,11 @@ const NodeContextMenu = ({
     let nameBase = match ? match[1] : name;
     let number = match ? parseInt(match[2]) + 1 : 1;
     // increase number until the name 'nameBase + number' (with and without 0 padding) is not taken
-    while (nodes.find((node) => nameMatches(node.data.content, nameBase, number))) {
+    while (number < 1000) { // loop-safeguard
+      // eslint-disable-next-line
+      if (!nodes.find((node) => nameMatches(node.data.content, nameBase, number))) {
+        break;
+      }
       number++;
     }
     return getPaddedName(nameBase, number);

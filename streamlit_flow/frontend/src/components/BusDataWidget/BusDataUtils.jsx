@@ -130,7 +130,6 @@ function updateBusDataOnEdgeDelete(nodes, edge) {
 
 export {
   updateBusDataOnEdgeConnect,
-  // removeBusConnection,
   getEmptyBusdata,
   updateBusDataOnNodeDelete,
   getEnergyFlowOnInputOrderChange,

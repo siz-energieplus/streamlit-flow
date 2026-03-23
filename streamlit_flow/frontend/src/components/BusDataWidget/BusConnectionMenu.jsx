@@ -11,7 +11,7 @@ import EnergyFlowMatrix from './EnergyFlowMatrix';
  * @returns A list of node names (string)
  */
 function getNodeNamesFromIDs(nodeIDs, allNodes) {
-  let nodes = nodeIDs.map((id) => allNodes.find((n) => n.id == id));
+  let nodes = nodeIDs.map((id) => allNodes.find((n) => n.id === id));
   let nodeNames = nodes.map((node) => node.data.content);
   return nodeNames;
 }
@@ -29,7 +29,7 @@ function getNodeIDsFromNames(names, allNodes) {
 export default function BusConnectionMenu({ node, nodes, onBusDataChange }) {
   if (node.data.component_type.toLowerCase() !== 'bus') return <></>;
   let busData = node.data.bus_data;
-  if (busData.input_order == 0 || busData.output_order == 0) return <></>;
+  if (busData.input_order === 0 || busData.output_order === 0) return <></>;
 
   /**
    * Turn the list of node names to a list of node IDs and update the node data input_order
