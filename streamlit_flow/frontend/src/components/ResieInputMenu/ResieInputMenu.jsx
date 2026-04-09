@@ -1,25 +1,21 @@
-import Modal from 'react-bootstrap/Modal';
 import RequiredInputMenu from './RequiredInputMenu';
 import OptionalInputMenu from './OptionalInputMenu';
+import BusConnectionMenu from '../BusDataWidget/BusConnectionMenu';
 
-function ResieInputMenu({ nodeInputObjects, onValueChange, onIncludedChange }) {
+function ResieInputMenu({ node, nodes, onValueChange, onIncludedChange, onBusDataChange }) {
+  let nodeInputObjects = node.data.resie_data;
   let requiredInputs = nodeInputObjects.filter((obj) => obj.required);
   let optionalInputs = nodeInputObjects.filter((obj) => !obj.required);
 
   return (
     <>
-      <Modal.Body>
-        <Modal.Header>Required Inputs</Modal.Header>
-        <RequiredInputMenu requiredInputObjects={requiredInputs} onEdit={onValueChange} />
-      </Modal.Body>
-      <Modal.Body>
-        <Modal.Header>Optional Inputs</Modal.Header>
-        <OptionalInputMenu
-          optionalInputObjects={optionalInputs}
-          onValueChange={onValueChange}
-          onIncludedChange={onIncludedChange}
-        />
-      </Modal.Body>
+      <RequiredInputMenu requiredInputObjects={requiredInputs} onEdit={onValueChange} />
+      <OptionalInputMenu
+        optionalInputObjects={optionalInputs}
+        onValueChange={onValueChange}
+        onIncludedChange={onIncludedChange}
+      />
+      <BusConnectionMenu node={node} nodes={nodes} onBusDataChange={onBusDataChange} />
     </>
   );
 }

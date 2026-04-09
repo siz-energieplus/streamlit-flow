@@ -1,18 +1,24 @@
 import { Row, Col, Form } from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
 import CustomInputField from './CustomInputField';
 import { useState } from 'react';
 
 function OptionalInputMenu({ optionalInputObjects, onValueChange, onIncludedChange }) {
+  if (optionalInputObjects.length === 0) return <></>;
+
   return (
     <>
-      {optionalInputObjects.map((nodeInput) => (
-        <OptionalInputField
-          nodeInput={nodeInput}
-          onValueChange={onValueChange}
-          startIncluded={nodeInput.isIncluded}
-          onIncludedChange={onIncludedChange}
-        />
-      ))}
+      <Modal.Body className="side-padded-menu">
+        <Modal.Header>Optional Inputs</Modal.Header>
+        {optionalInputObjects.map((nodeInput) => (
+          <OptionalInputField
+            nodeInput={nodeInput}
+            onValueChange={onValueChange}
+            startIncluded={nodeInput.isIncluded}
+            onIncludedChange={onIncludedChange}
+          />
+        ))}
+      </Modal.Body>
     </>
   );
 }
@@ -32,8 +38,8 @@ function OptionalInputField({ nodeInput, onValueChange, startIncluded, onInclude
   };
 
   return (
-    <Row className="g-2 mt-1 mt-md-0">
-      <Col md>
+    <Row className="g-2 mt-1 mt-md-0 optional-input-row">
+      <Col className="optional-input-checkbox">
         <Form.Check
           type="switch"
           checked={isIncluded}
@@ -43,7 +49,7 @@ function OptionalInputField({ nodeInput, onValueChange, startIncluded, onInclude
           onChange={onSwitchClicked}
         />
       </Col>
-      <Col md>
+      <Col className="optonal-input-input-field">
         <CustomInputField nodeInput={nodeInput} onEdit={onValueFieldEdit} />
       </Col>
     </Row>

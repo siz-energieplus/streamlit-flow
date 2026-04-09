@@ -1,11 +1,12 @@
-from typing import Dict, Tuple, Union, Type, TypeVar, Literal
-from node_input import NodeInput
+from typing import Dict, Tuple, Type, TypeVar, Literal
+from Components.node_input import NodeInput
+import copy
 
-T_StreamlitFlowNode = TypeVar('T_StreamlitFlowNode', bound='StreamlitFlowNode')
-T_StreamlitFlowEdge = TypeVar('T_StreamlitFlowEdge', bound='StreamlitFlowEdge')
+T_StreamlitFlowNode = TypeVar("T_StreamlitFlowNode", bound="StreamlitFlowNode")
+T_StreamlitFlowEdge = TypeVar("T_StreamlitFlowEdge", bound="StreamlitFlowEdge")
+
 
 class StreamlitFlowNode:
-
     """
     Represents a node in streamlit_flow
 
@@ -31,32 +32,34 @@ class StreamlitFlowNode:
     - **style** : Dict[str, any] : CSS style of the node
     """
 
-    def __init__(self,
-                    id:str,
-                    pos: Tuple[float, float],
-                    data:Dict[str, any],
-                    node_type:Literal['default', 'input', 'output'] = 'default',
-                    source_position:Literal['bottom', 'top', 'left', 'right'] = 'bottom',
-                    source_handles:int = 0,
-                    target_position:Literal['bottom', 'top', 'left', 'right'] = 'top',
-                    target_handles:int = 0,
-                    hidden:bool=False,
-                    selected:bool=False,
-                    dragging:bool=False,
-                    draggable:bool=True,
-                    selectable:bool=False,
-                    connectable:bool=False,
-                    resizing:bool=False,
-                    deletable:bool=False,
-                    z_index:float=0,
-                    focusable:bool=True,
-                    style:Dict[str, any]={},
-                    **kwargs) -> None:
+    def __init__(
+        self,
+        id: str,
+        pos: Tuple[float, float],
+        data: Dict[str, any],
+        node_type: Literal["default", "input", "output"] = "default",
+        source_position: Literal["bottom", "top", "left", "right"] = "bottom",
+        source_handles: int = 0,
+        target_position: Literal["bottom", "top", "left", "right"] = "top",
+        target_handles: int = 0,
+        hidden: bool = False,
+        selected: bool = False,
+        dragging: bool = False,
+        draggable: bool = True,
+        selectable: bool = False,
+        connectable: bool = False,
+        resizing: bool = False,
+        deletable: bool = False,
+        z_index: float = 0,
+        focusable: bool = True,
+        style: Dict[str, any] = {},
+        **kwargs,
+    ) -> None:
 
-        if 'width' not in style:
-            style['width'] = 'auto'
-        if 'height' not in style:
-            style['height'] = 'auto'
+        if "width" not in style:
+            style["width"] = "auto"
+        if "height" not in style:
+            style["height"] = "auto"
 
         self.id = id
         self.position = {"x": pos[0], "y": pos[1]}
@@ -80,58 +83,79 @@ class StreamlitFlowNode:
         self.kwargs = kwargs
 
         # Remove post V1.3.0
-        if 'label' in self.data:
-            content = self.data.pop('label')
-            self.data['content'] = content
+        if "label" in self.data:
+            content = self.data.pop("label")
+            self.data["content"] = content
 
         self.__validate__()
 
     @classmethod
-    def from_dict(cls: Type[T_StreamlitFlowNode], node_dict:Dict[str, any]) -> T_StreamlitFlowNode:
+    def from_dict(
+        cls: Type[T_StreamlitFlowNode], node_dict: Dict[str, any]
+    ) -> T_StreamlitFlowNode:
         # serialize data extra, because it contains list of NodeInputs
-        data_obj = node_dict.get('data', {})
-        node_input_objects = data_obj.get('resie_data', [])
-        data_obj['resie_data'] = NodeInput.list_from_dict(node_input_objects)
+        data_obj = node_dict.get("data", {})
+        node_input_objects = data_obj.get("resie_data", [])
+        data_obj["resie_data"] = NodeInput.list_from_dict(node_input_objects)
 
         # other_attributes_dict = {key: value for key, value in node_dict.items() if key not in ['id', 'position', 'data', 'type', 'sourcePosition', 'targetPosition', 'hidden', 'selected', 'dragging', 'draggable', 'selectable', 'connectable', 'resizing', 'deletable', 'width', 'height', 'zIndex', 'focusable', 'style']}
 
-        return cls( id=node_dict.get('id', ''),
-                    pos=(node_dict['position'].get('x', 0), node_dict['position'].get('y', 0)),
-                    data=data_obj,
-                    node_type=node_dict.get('type', 'default'),
-                    source_position=node_dict.get('sourcePosition', 'bottom'),
-                    source_handles=node_dict.get('sourceHandles', 0),
-                    target_position=node_dict.get('targetPosition', 'top'),
-                    target_handles=node_dict.get('targetHandles', 0),
-                    hidden=node_dict.get('hidden', False),
-                    selected=node_dict.get('selected', False),
-                    dragging=node_dict.get('dragging', False),
-                    draggable=node_dict.get('draggable', True),
-                    selectable=node_dict.get('selectable', False),
-                    connectable=node_dict.get('connectable', True),
-                    resizing=node_dict.get('resizing', False),
-                    deletable=node_dict.get('deletable', False),
-                    z_index=node_dict.get('zIndex', 0),
-                    focusable=node_dict.get('focusable', True),
-                    style=node_dict.get('style', {}))
-
+        return cls(
+            id=node_dict.get("id", ""),
+            pos=(node_dict["position"].get("x", 0), node_dict["position"].get("y", 0)),
+            data=data_obj,
+            node_type=node_dict.get("type", "default"),
+            source_position=node_dict.get("sourcePosition", "bottom"),
+            source_handles=node_dict.get("sourceHandles", 0),
+            target_position=node_dict.get("targetPosition", "top"),
+            target_handles=node_dict.get("targetHandles", 0),
+            hidden=node_dict.get("hidden", False),
+            selected=node_dict.get("selected", False),
+            dragging=node_dict.get("dragging", False),
+            draggable=node_dict.get("draggable", True),
+            selectable=node_dict.get("selectable", False),
+            connectable=node_dict.get("connectable", True),
+            resizing=node_dict.get("resizing", False),
+            deletable=node_dict.get("deletable", False),
+            z_index=node_dict.get("zIndex", 0),
+            focusable=node_dict.get("focusable", True),
+            style=node_dict.get("style", {}),
+        )
 
     def __validate__(self):
-        assert self.type in ['default', 'input', 'output'], f"Node type must be one of ['default', 'input', 'output']. Got {self.type}"
-        assert self.source_position in ['top', 'bottom', 'left', 'right'], f"Source position must be one of ['top', 'bottom', 'left', 'right']. Got {self.source_position}"
-        assert self.target_position in ['top', 'bottom', 'left', 'right'], f"Target position must be one of ['top', 'bottom', 'left', 'right']. Got {self.target_position}"
-        assert self.type != 'input' or self.source_handles >= 0, f"Number of source anchors must be 0 or a positive integer."
-        assert self.type != 'output' or self.target_handles >= 0, f"Number of target anchors must be 0 or a positive integer."
-
+        assert self.type in [
+            "default",
+            "input",
+            "output",
+        ], f"Node type must be one of ['default', 'input', 'output']. Got {self.type}"
+        assert self.source_position in [
+            "top",
+            "bottom",
+            "left",
+            "right",
+        ], f"Source position must be one of ['top', 'bottom', 'left', 'right']. Got {self.source_position}"
+        assert self.target_position in [
+            "top",
+            "bottom",
+            "left",
+            "right",
+        ], f"Target position must be one of ['top', 'bottom', 'left', 'right']. Got {self.target_position}"
+        assert (
+            self.type != "input" or self.source_handles >= 0
+        ), f"Number of source anchors must be 0 or a positive integer."
+        assert (
+            self.type != "output" or self.target_handles >= 0
+        ), f"Number of target anchors must be 0 or a positive integer."
 
     def asdict(self) -> Dict[str, any]:
-        node_inputs = self.data.get('resie_data', [])
-        self.data['resie_data'] = NodeInput.list_asdict(node_inputs)
-        
+        data = copy.deepcopy(self.data)
+        resie_data = data.get("resie_data", [])
+        data["resie_data"] = NodeInput.list_asdict(resie_data)
+
         node_dict = {
             "id": self.id,
             "position": self.position,
-            "data": self.data,
+            "data": data,
             "type": self.type,
             "sourcePosition": self.source_position,
             "sourceHandles": self.source_handles,
@@ -150,10 +174,12 @@ class StreamlitFlowNode:
             "style": self.style,
         }
         node_dict.update(self.kwargs)
-        node_dict["data"].update({
-            "sourceHandles": self.source_handles,
-            "targetHandles": self.target_handles,
-        })
+        node_dict["data"].update(
+            {
+                "sourceHandles": self.source_handles,
+                "targetHandles": self.target_handles,
+            }
+        )
         return node_dict
 
     def __repr__(self):
@@ -161,7 +187,6 @@ class StreamlitFlowNode:
 
 
 class StreamlitFlowEdge:
-
     """
     Represents an edge in streamlit_flow
 
@@ -187,28 +212,32 @@ class StreamlitFlowEdge:
     - **targetHandle** : str : the handle of the target node the edge is attached to
     """
 
-    def __init__(self,
-                    id:str,
-                    source:str,
-                    target:str,
-                    edge_type:Literal['default', 'straight', 'step', "smoothstep", "simplebezier"]="default",
-                    marker_start:dict={},
-                    marker_end:dict={},
-                    hidden:bool=False,
-                    animated:bool=False,
-                    selected:bool=False,
-                    deletable:bool=False,
-                    focusable:bool=False,
-                    z_index:float=0,
-                    label:str="",
-                    label_style:Dict[str, any]={},
-                    label_show_bg:bool=False,
-                    label_bg_style:Dict[str, any]={},
-                    style:Dict[str, any]={},
-                    sourceHandle:str="unknown",
-                    targetHandle:str="unknown",
-                    medium_key: str = "UNDEFINED",
-                    **kwargs) -> None:
+    def __init__(
+        self,
+        id: str,
+        source: str,
+        target: str,
+        edge_type: Literal[
+            "default", "straight", "step", "smoothstep", "simplebezier"
+        ] = "default",
+        marker_start: dict = {},
+        marker_end: dict = {},
+        hidden: bool = False,
+        animated: bool = False,
+        selected: bool = False,
+        deletable: bool = False,
+        focusable: bool = False,
+        z_index: float = 0,
+        label: str = "",
+        label_style: Dict[str, any] = {},
+        label_show_bg: bool = False,
+        label_bg_style: Dict[str, any] = {},
+        style: Dict[str, any] = {},
+        sourceHandle: str = "unknown",
+        targetHandle: str = "unknown",
+        medium_key: str = "UNDEFINED",
+        **kwargs,
+    ) -> None:
 
         self.id = id
         self.source = source
@@ -235,34 +264,42 @@ class StreamlitFlowEdge:
         self.__validate__()
 
     @classmethod
-    def from_dict(cls: Type[T_StreamlitFlowEdge], edge_dict:Dict[str, any]) -> T_StreamlitFlowEdge:
+    def from_dict(
+        cls: Type[T_StreamlitFlowEdge], edge_dict: Dict[str, any]
+    ) -> T_StreamlitFlowEdge:
 
         # other_attributes_dict = {key: value for key, value in edge_dict.items() if key not in ['id', 'source', 'target', 'type', 'hidden', 'animated', 'selected', 'deletable', 'focusable', 'zIndex', 'label', 'labelStyle', 'labelShowBg', 'labelBgStyle', 'style']}
-        return cls( id=edge_dict.get('id', ''),
-                    source=edge_dict.get('source', ''),
-                    target=edge_dict.get('target', ''),
-                    edge_type=edge_dict.get('type', 'default'),
-                    marker_start=edge_dict.get('markerStart', {}),
-                    marker_end=edge_dict.get('markerEnd', {}),
-                    hidden=edge_dict.get('hidden', False),
-                    animated=edge_dict.get('animated', False),
-                    selected=edge_dict.get('selected', False),
-                    deletable=edge_dict.get('deletable', False),
-                    focusable=edge_dict.get('focusable', False),
-                    z_index=edge_dict.get('zIndex', 0),
-                    label=edge_dict.get('label', ''),
-                    label_style=edge_dict.get('labelStyle', {}),
-                    label_show_bg=edge_dict.get('labelShowBg', False),
-                    label_bg_style=edge_dict.get('labelBgStyle', {}),
-                    style=edge_dict.get('style', {}),
-                    sourceHandle=edge_dict.get('sourceHandle',"unknown"),
-                    targetHandle=edge_dict.get('targetHandle',"unknown"),
-                    medium_key=edge_dict.get('medium_key', "UNDEFINED"))
-
+        return cls(
+            id=edge_dict.get("id", ""),
+            source=edge_dict.get("source", ""),
+            target=edge_dict.get("target", ""),
+            edge_type=edge_dict.get("type", "default"),
+            marker_start=edge_dict.get("markerStart", {}),
+            marker_end=edge_dict.get("markerEnd", {}),
+            hidden=edge_dict.get("hidden", False),
+            animated=edge_dict.get("animated", False),
+            selected=edge_dict.get("selected", False),
+            deletable=edge_dict.get("deletable", False),
+            focusable=edge_dict.get("focusable", False),
+            z_index=edge_dict.get("zIndex", 0),
+            label=edge_dict.get("label", ""),
+            label_style=edge_dict.get("labelStyle", {}),
+            label_show_bg=edge_dict.get("labelShowBg", False),
+            label_bg_style=edge_dict.get("labelBgStyle", {}),
+            style=edge_dict.get("style", {}),
+            sourceHandle=edge_dict.get("sourceHandle", "unknown"),
+            targetHandle=edge_dict.get("targetHandle", "unknown"),
+            medium_key=edge_dict.get("medium_key", "UNDEFINED"),
+        )
 
     def __validate__(self) -> None:
-        assert self.type in ['default', 'straight', 'step', "smoothstep", "simplebezier"], f"Edge type must be one of ['default', 'straight', 'step', 'smoothstep', 'simplebezier']. Got {self.type}"
-
+        assert self.type in [
+            "default",
+            "straight",
+            "step",
+            "smoothstep",
+            "simplebezier",
+        ], f"Edge type must be one of ['default', 'straight', 'step', 'smoothstep', 'simplebezier']. Got {self.type}"
 
     def asdict(self) -> Dict[str, any]:
         edge_dict = {

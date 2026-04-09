@@ -1,4 +1,5 @@
 import { Row, Col } from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
 import CustomInputField from './CustomInputField';
 
 function RequiredInputMenu({ requiredInputObjects, onEdit }) {
@@ -24,18 +25,22 @@ function RequiredInputMenu({ requiredInputObjects, onEdit }) {
     return rows;
   }
 
+  if (requiredInputObjects.length === 0) return <></>;
   var rows = chunk_into_rows(2);
   return (
     <>
-      {rows.map((pair) => (
-        <Row className="g-2 mt-1 mt-md-0">
-          {pair.map((nodeInput) => (
-            <Col md>
-              <CustomInputField nodeInput={nodeInput} onEdit={onEdit} />
-            </Col>
-          ))}
-        </Row>
-      ))}
+      <Modal.Body className="side-padded-menu">
+        <Modal.Header>Required Inputs</Modal.Header>
+        {rows.map((pair) => (
+          <Row className="g-2 mt-1 mt-md-0">
+            {pair.map((nodeInput) => (
+              <Col md>
+                <CustomInputField nodeInput={nodeInput} onEdit={onEdit} />
+              </Col>
+            ))}
+          </Row>
+        ))}
+      </Modal.Body>
     </>
   );
 }
